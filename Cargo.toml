@@ -1,0 +1,6 @@
+[package]
+name = "sorted"
+version = "0.1.0"
+authors = ["Kim Simmons <zoomulator@gmail.com>"]
+
+[dependencies]
