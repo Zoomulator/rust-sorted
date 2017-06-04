@@ -7,6 +7,7 @@ use std::cmp::Ordering;
 
 pub trait Sorted {}
 
+#[derive(Debug)]
 pub struct SortedSlice<'a,T,S>
 where
     T:'a,
@@ -21,7 +22,7 @@ where
     T: Ord,
     S: SortOrder<T>
 {
-    pub fn by_sorting(slice: &'a mut [T], mut order: S) -> Self {
+    pub fn by_sorting(slice: &'a mut [T], order: S) -> Self {
         S::sort(slice);
         Self {inner: slice, order} 
     }
@@ -51,6 +52,7 @@ impl<'a,T,S> Sorted for SortedSlice<'a,T,S>
 where S: SortOrder<T>
 {}
 
+#[derive(Debug)]
 pub struct SortedVec<T,S: SortOrder<T>> {
     inner: Vec<T>,
     order: S,
@@ -60,7 +62,7 @@ impl<T,S> SortedVec<T,S>
 where
     S: SortOrder<T>
 {
-    pub fn by_sorting<I>(unsorted: I, mut order: S) -> Self
+    pub fn by_sorting<I>(unsorted: I, order: S) -> Self
     where
         I: IntoIterator<Item=T>
     {
@@ -93,7 +95,7 @@ pub trait SortOrder<T> : Clone + Copy {
     fn sort(&mut [T]);
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct DefaultOrder;
 
 impl<T> SortOrder<T> for DefaultOrder
@@ -105,20 +107,29 @@ where T: Ord {
 
 
 macro_rules! order_by_key {
-    ($name:ident: $($t:ty => |$entry:ident| $fn:block;)*) => (
-        #[derive(Clone, Copy)]
+    ($name:ident: $(fn ($($gen:tt)*) ($entry:ident: $t:ty) -> $r:ty $blk:block)*) => (
+        #[derive(Debug, Clone, Copy)]
         struct $name;
 
-        $(impl SortOrder<$t> for $name
+        $(impl<$($gen)*> SortOrder<$t> for $name
         {
             fn sort(s: &mut [$t]) {
-                s.sort_by_key(|$entry| $fn)
+                fn key<$($gen)*>($entry: &$t) -> $r $blk
+                s.sort_by_key(key)
             }
         })*
     );
 }
 
 order_by_key!{ SortByFirst:
-    (i32,i32) => |entry| {entry.0};
-    (i32,i32,i32) => |entry| {entry.0};
+    fn (T: Ord + Clone)(entry: (T,T)) -> T { entry.0.clone() }
+    fn (T: Ord + Clone)(entry: (T,T,T)) -> T { entry.0.clone() }
+}
+
+
+#[test]
+fn test_sort_by_first() {
+    let s: [(i32,i32);3] = [(5,3),(2,7),(3,4)];
+    let v = SortedVec::by_sorting(s.iter().cloned(), SortByFirst);
+    println!("{:?}", v);
 }
