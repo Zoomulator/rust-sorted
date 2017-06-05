@@ -1,5 +1,7 @@
 use std::ops;
 use std::cmp::Ordering;
+use std::marker::PhantomData;
+use std::mem;
 
 
 // I wonder if the order property of the sorted slices and vecs are
@@ -14,7 +16,7 @@ where
     S: SortOrder<T>
 {
     inner: &'a[T],
-    order: S
+    order: PhantomData<*const S>
 }
 
 impl<'a,T,S> SortedSlice<'a,T,S>
@@ -22,9 +24,9 @@ where
     T: Ord,
     S: SortOrder<T>
 {
-    pub fn by_sorting(slice: &'a mut [T], order: S) -> Self {
+    pub fn by_sorting(slice: &'a mut [T], _: S) -> Self {
         S::sort(slice);
-        Self {inner: slice, order} 
+        Self {inner: slice, order: PhantomData} 
     }
 }
 
@@ -55,32 +57,45 @@ where S: SortOrder<T>
 #[derive(Debug)]
 pub struct SortedVec<T,S: SortOrder<T>> {
     inner: Vec<T>,
-    order: S,
+    order: PhantomData<*const S>
 }
 
 impl<T,S> SortedVec<T,S>
 where
     S: SortOrder<T>
 {
-    pub fn by_sorting<I>(unsorted: I, order: S) -> Self
+    pub fn by_sorting<I>(unsorted: I, _: S) -> Self
     where
         I: IntoIterator<Item=T>
     {
         let mut inner: Vec<T> = unsorted.into_iter().collect();
         S::sort(&mut inner);
-        Self {inner, order}
+        Self {inner, order: PhantomData}
     }
 
-    pub fn slice(&self) -> SortedSlice<T,S> {
+    pub fn as_sorted_slice(&self) -> SortedSlice<T,S> {
         SortedSlice{
-            inner: &self.inner[..],
+            inner: &self.inner,
             order: self.order
         }
     }
+
+    pub fn as_slice(&self) -> &[T] {
+        &self.inner
+    }
 }
 
-// Can't deref to SortedSlice from SortedVec. SortOrder must be made completely
-// static.
+impl<'a,T,S> From<&'a SortedVec<T,S>> for SortedSlice<'a,T,S>
+where
+    S: SortOrder<T>
+{
+    fn from(v: &'a SortedVec<T,S>) -> Self {
+        SortedSlice {
+            inner: v.as_slice(),
+            order: PhantomData
+        }
+    }
+}
 
 impl<T,S> Into<Vec<T>> for SortedVec<T,S>
 where
@@ -123,13 +138,19 @@ macro_rules! order_by_key {
 
 order_by_key!{ SortByFirst:
     fn (T: Ord + Clone)(entry: (T,T)) -> T { entry.0.clone() }
-    fn (T: Ord + Clone)(entry: (T,T,T)) -> T { entry.0.clone() }
+}
+
+order_by_key!{ SortBySecond:
+    fn (T: Ord + Clone)(entry: (T,T)) -> T { entry.1.clone() }
 }
 
 
 #[test]
 fn test_sort_by_first() {
-    let s: [(i32,i32);3] = [(5,3),(2,7),(3,4)];
-    let v = SortedVec::by_sorting(s.iter().cloned(), SortByFirst);
-    println!("{:?}", v);
+    let s = vec![(5,3),(2,7),(3,4)];
+    let v = SortedVec::by_sorting(s, SortBySecond);
+    assert_eq!(
+        &[(5,3),(3,4),(2,7)],
+        v.as_slice()
+    );
 }
