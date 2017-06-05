@@ -31,6 +31,13 @@ where
         O::sort(&mut inner);
         Self {inner, ordering: PhantomData}
     }
+
+    pub fn insert(&mut self, x: T) {
+        match O::search(&self.inner, &O::key(&x)) {
+            Ok(i) => self.inner.insert(i, x),
+            Err(i) => self.inner.insert(i, x)
+        }
+    }
 }
 
 impl<T,O> SortedVec<T,O> {

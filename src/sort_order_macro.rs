@@ -6,9 +6,16 @@ macro_rules! order_by_key {
 
         $(impl<$($gen)*> $crate::SortOrder<$t> for $name
         {
+            type Key = $r;
+
+            fn key($entry: &$t) -> $r $blk
+
             fn sort(s: &mut [$t]) {
-                fn key<$($gen)*>($entry: &$t) -> $r $blk
-                s.sort_by_key(key)
+                s.sort_by_key(Self::key)
+            }
+
+            fn search(s: &[$t], k: &$r) -> Result<usize, usize> {
+                s.binary_search_by_key(k, Self::key)
             }
         })*
     );

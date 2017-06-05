@@ -4,11 +4,11 @@ extern crate sorted;
 use sorted::*;
 
 order_by_key!{ SortByFirst:
-    fn (T: Ord + Clone)(entry: (T,T)) -> T { entry.0.clone() }
+    fn (K: Ord + Copy, T)(entry: (K,T)) -> K { entry.0 }
 }
 
 order_by_key!{ SortBySecond:
-    fn (T: Ord + Clone)(entry: (T,T)) -> T { entry.1.clone() }
+    fn (K: Ord + Copy, T)(entry: (T,K)) -> K { entry.1 }
 }
 
 
@@ -27,8 +27,8 @@ fn slice_from_sorted() {
     let vec = SortedVec::by_sorting(vec![4,9,2,33,1], DefaultOrder);
     let slice = SortedSlice::from(&vec);
     assert_eq!(
-        slice,
-        &[1,2,4,9,33]
+        &[1,2,4,9,33],
+        &*slice
     );
 }
 
@@ -38,8 +38,8 @@ fn sorted_vec_from_sorted_slice() {
     let slice = SortedSlice::by_sorting(&mut arr, DefaultOrder);
     let vec = SortedVec::from(slice);
     assert_eq!(
-        vec.as_slice(),
-        [3,5,7,9]
+        [3,5,7,9],
+        vec.as_slice()
     );
 }
 
@@ -47,9 +47,22 @@ fn sorted_vec_from_sorted_slice() {
 fn take_sorted_iterator() {
     fn take_sorted<I>(sorted: I) where I: IntoIterator<Item=i32> + Sorted {
         let v: Vec<_> = sorted.into_iter().collect();
-        assert_eq!(vec![2,3,8,10], v);
+        assert_eq!(
+            vec![2,3,8,10],
+            v
+        );
     }
     let data: Vec<i32> = vec![3,8,2,10];
     let vec = SortedVec::by_sorting(data, DefaultOrder);
     take_sorted(vec);
+}
+
+#[test]
+fn sorted_insert() {
+    let mut vec = SortedVec::by_sorting(vec![4,8,2,0], DefaultOrder);
+    vec.insert(6);
+    assert_eq!(
+        [0,2,4,6,8],
+        vec.as_slice()
+    );
 }

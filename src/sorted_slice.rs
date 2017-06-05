@@ -49,15 +49,6 @@ where T: Ord
     }
 }
 
-impl<'a,T,O> ops::Index<usize> for SortedSlice<'a,T,O>
-{
-    type Output = T;
-    fn index(&self, i: usize) -> &Self::Output {
-        &self.inner[i]
-    }
-}
-
-/*
 impl<'a,T,S> ops::Deref for SortedSlice<'a,T,S> 
 {
     type Target = [T];
@@ -65,7 +56,6 @@ impl<'a,T,S> ops::Deref for SortedSlice<'a,T,S>
         self.inner
     }
 }
-*/
 
 impl<'a,T,O,U> From<&'a U> for SortedSlice<'a,T,O>
 where
