@@ -1,7 +1,5 @@
 use std::ops;
-use std::cmp::Ordering;
 use std::marker::PhantomData;
-use std::mem;
 
 
 // I wonder if the order property of the sorted slices and vecs are
@@ -12,8 +10,7 @@ pub trait Sorted {}
 #[derive(Debug)]
 pub struct SortedSlice<'a,T,S>
 where
-    T:'a,
-    S: SortOrder<T>
+    T:'a
 {
     inner: &'a[T],
     order: PhantomData<*const S>
@@ -31,8 +28,6 @@ where
 }
 
 impl<'a,T,S> ops::Index<usize> for SortedSlice<'a,T,S>
-where
-    S: SortOrder<T>
 {
     type Output = T;
     fn index(&self, i: usize) -> &Self::Output {
@@ -41,8 +36,6 @@ where
 }
 
 impl<'a,T,S> ops::Deref for SortedSlice<'a,T,S> 
-where
-    S: SortOrder<T>
 {
     type Target = [T];
     fn deref(&self) -> &[T] {
@@ -55,7 +48,7 @@ where S: SortOrder<T>
 {}
 
 #[derive(Debug)]
-pub struct SortedVec<T,S: SortOrder<T>> {
+pub struct SortedVec<T,S> {
     inner: Vec<T>,
     order: PhantomData<*const S>
 }
@@ -72,7 +65,9 @@ where
         S::sort(&mut inner);
         Self {inner, order: PhantomData}
     }
+}
 
+impl<T,S> SortedVec<T,S> {
     pub fn as_sorted_slice(&self) -> SortedSlice<T,S> {
         SortedSlice{
             inner: &self.inner,
@@ -86,8 +81,6 @@ where
 }
 
 impl<'a,T,S> From<&'a SortedVec<T,S>> for SortedSlice<'a,T,S>
-where
-    S: SortOrder<T>
 {
     fn from(v: &'a SortedVec<T,S>) -> Self {
         SortedSlice {
@@ -98,8 +91,6 @@ where
 }
 
 impl<T,S> Into<Vec<T>> for SortedVec<T,S>
-where
-    S: SortOrder<T>
 {
     fn into(self) -> Vec<T> {
         self.inner
