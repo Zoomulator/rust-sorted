@@ -13,7 +13,7 @@ order_by_key!{ SortBySecond:
 
 
 #[test]
-fn test_sort_by_first() {
+fn sort_by_second() {
     let s = vec![(5,3),(2,7),(3,4)];
     let v = SortedVec::by_sorting(s, SortBySecond);
     assert_eq!(
@@ -41,4 +41,17 @@ fn sorted_vec_from_sorted_slice() {
         vec.as_slice(),
         [3,5,7,9]
     );
+}
+
+#[test]
+fn take_sorted_iterator() {
+    fn take_sorted<I>(sorted: I)
+    where I: IntoIterator<Item=i32> + Sorted
+    {
+        let v: Vec<_> = sorted.into_iter().collect();
+        assert_eq!(vec![2,3,8,10], v);
+    }
+    let data: Vec<i32> = vec![3,8,2,10];
+    let vec = SortedVec::by_sorting(data, DefaultOrder);
+    take_sorted(vec);
 }

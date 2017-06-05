@@ -1,7 +1,9 @@
+use std::vec;
 use std::ops;
 use std::marker::PhantomData;
 
 use super::{
+    SortedIter,
     Sorted,
     SortOrder,
     SortedSlice,
@@ -61,21 +63,36 @@ where
     }
 }
 
-impl<'a,T,O,U> From<U> for SortedVec<T,O>
-where
-    U: IntoIterator<Item=T> + Sorted<Ordering=O>
+// Can't match FromIterator when adding Sorted bound.
+// Define a new FromSortedIterator trait?
+/*
+impl<'a,T,O> std::iter::FromIterator<T> for SortedVec<T,O>
 {
-    fn from(x: U) -> Self {
+    fn from_iter<I>(x: I) -> Self
+    where I: IntoIterator<Item=T> + Sorted<Ordering=O> {
         SortedVec {
             inner: x.into_iter().collect(),
             ordering: PhantomData,
         }
     }
 }
+*/
 
 impl<T,O> Into<Vec<T>> for SortedVec<T,O>
 {
     fn into(self) -> Vec<T> {
         self.inner
+    }
+}
+
+impl<O,T> IntoIterator for SortedVec<T,O>
+{
+    type Item = T;
+    type IntoIter = SortedIter<vec::IntoIter<T>,O>;
+    fn into_iter(self) -> Self::IntoIter {
+        SortedIter {
+            inner: self.inner.into_iter(),
+            ordering: PhantomData
+        }
     }
 }
