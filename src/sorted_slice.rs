@@ -2,6 +2,7 @@ use std::ops;
 use std::marker::PhantomData;
 
 use super::{
+    Sortable,
     Sorted,
     SortOrder,
 };
@@ -25,9 +26,9 @@ where
     T: Ord,
     O: SortOrder<T>
 {
-    pub fn by_sorting(slice: &'a mut [T], _: O) -> Self {
-        O::sort(slice);
-        Self {inner: slice, ordering: PhantomData} 
+    pub fn by_sorting(inner: &'a mut [T], _: O) -> Self {
+        Sortable::sort(&mut *inner, O::cmp);
+        Self {inner, ordering: PhantomData} 
     }
 }
 

@@ -3,6 +3,7 @@ use std::ops;
 use std::marker::PhantomData;
 
 use super::{
+    Sortable,
     SortedIter,
     Sorted,
     SortOrder,
@@ -28,15 +29,15 @@ where
         I: IntoIterator<Item=T>
     {
         let mut inner: Vec<T> = unsorted.into_iter().collect();
-        O::sort(&mut inner);
+        Sortable::sort(&mut inner, O::cmp);
         Self {inner, ordering: PhantomData}
     }
 
     pub fn insert(&mut self, x: T) {
-        match O::search(&self.inner, &O::key(&x)) {
-            Ok(i) => self.inner.insert(i, x),
-            Err(i) => self.inner.insert(i, x)
-        }
+        let i = match Sortable::search(&self.inner, &x, O::cmp) {
+            Ok(i) => i, Err(i) => i
+        };
+        self.inner.insert(i, x);
     }
 }
 

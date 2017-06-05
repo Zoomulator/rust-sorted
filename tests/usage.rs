@@ -11,6 +11,15 @@ order_by_key!{ SortBySecond:
     fn (K: Ord + Copy, T)(entry: (T,K)) -> K { entry.1 }
 }
 
+#[test]
+fn sort_by_first() {
+    let s = vec![(5,3),(2,7),(3,4)];
+    let v = SortedVec::by_sorting(s, SortByFirst);
+    assert_eq!(
+        &[(2,7),(3,4),(5,3)],
+        v.as_slice()
+    );
+}
 
 #[test]
 fn sort_by_second() {
@@ -23,12 +32,12 @@ fn sort_by_second() {
 }
 
 #[test]
-fn slice_from_sorted() {
+fn sorted_slice_from_sorted_vec() {
     let vec = SortedVec::by_sorting(vec![4,9,2,33,1], DefaultOrder);
     let slice = SortedSlice::from(&vec);
     assert_eq!(
-        &[1,2,4,9,33],
-        &*slice
+        [1,2,4,9,33][..],
+        *slice
     );
 }
 
