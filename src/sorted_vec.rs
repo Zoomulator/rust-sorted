@@ -8,30 +8,30 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct SortedVec<T,S> {
+pub struct SortedVec<T,O> {
     inner: Vec<T>,
-    order: PhantomData<*const S>
+    ordering: PhantomData<*const O>
 }
 
-impl<T,S> Sorted for SortedVec<T,S> {
-    type Ordering = S;
+impl<T,O> Sorted for SortedVec<T,O> {
+    type Ordering = O;
 }
 
-impl<T,S> SortedVec<T,S>
+impl<T,O> SortedVec<T,O>
 where
-    S: SortOrder<T>
+    O: SortOrder<T>
 {
-    pub fn by_sorting<I>(unsorted: I, _: S) -> Self
+    pub fn by_sorting<I>(unsorted: I, _: O) -> Self
     where
         I: IntoIterator<Item=T>
     {
         let mut inner: Vec<T> = unsorted.into_iter().collect();
-        S::sort(&mut inner);
-        Self {inner, order: PhantomData}
+        O::sort(&mut inner);
+        Self {inner, ordering: PhantomData}
     }
 }
 
-impl<T,S> SortedVec<T,S> {
+impl<T,O> SortedVec<T,O> {
     pub fn as_slice(&self) -> &[T] {
         &self.inner
     }
@@ -41,7 +41,7 @@ impl<T,S> SortedVec<T,S> {
     }
 }
 
-impl<T,S> ops::Deref for SortedVec<T,S> {
+impl<T,O> ops::Deref for SortedVec<T,O> {
     type Target = [T];
     fn deref(&self) -> &[T] {
         &self.inner
@@ -49,31 +49,31 @@ impl<T,S> ops::Deref for SortedVec<T,S> {
 }
 
 // The std::vec::Vec implements a From<&[T]>, so this makes sense.
-impl<'a,T,S> From<SortedSlice<'a,T,S>> for SortedVec<T,S>
+impl<'a,T,O> From<SortedSlice<'a,T,O>> for SortedVec<T,O>
 where
     T: Clone
 {
-    fn from(s: SortedSlice<'a,T,S>) -> Self {
+    fn from(s: SortedSlice<'a,T,O>) -> Self {
         SortedVec {
             inner: s.as_slice().to_vec(),
-            order: PhantomData
+            ordering: PhantomData
         }
     }
 }
 
-impl<'a,T,S,U> From<U> for SortedVec<T,S>
+impl<'a,T,O,U> From<U> for SortedVec<T,O>
 where
-    U: IntoIterator<Item=T> + Sorted<Ordering=S>
+    U: IntoIterator<Item=T> + Sorted<Ordering=O>
 {
     fn from(x: U) -> Self {
         SortedVec {
             inner: x.into_iter().collect(),
-            order: PhantomData,
+            ordering: PhantomData,
         }
     }
 }
 
-impl<T,S> Into<Vec<T>> for SortedVec<T,S>
+impl<T,O> Into<Vec<T>> for SortedVec<T,O>
 {
     fn into(self) -> Vec<T> {
         self.inner

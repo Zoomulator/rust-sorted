@@ -8,36 +8,36 @@ use super::{
 
 
 #[derive(Debug)]
-pub struct SortedSlice<'a,T,S>
+pub struct SortedSlice<'a,T,O>
 where
     T:'a
 {
     inner: &'a[T],
-    order: PhantomData<*const S>
+    ordering: PhantomData<*const O>
 }
 
-impl<'a,T,S> Sorted for SortedSlice<'a,T,S> {
-    type Ordering = S;
+impl<'a,T,O> Sorted for SortedSlice<'a,T,O> {
+    type Ordering = O;
 }
 
-impl<'a,T,S> SortedSlice<'a,T,S>
+impl<'a,T,O> SortedSlice<'a,T,O>
 where
     T: Ord,
-    S: SortOrder<T>
+    O: SortOrder<T>
 {
-    pub fn by_sorting(slice: &'a mut [T], _: S) -> Self {
-        S::sort(slice);
-        Self {inner: slice, order: PhantomData} 
+    pub fn by_sorting(slice: &'a mut [T], _: O) -> Self {
+        O::sort(slice);
+        Self {inner: slice, ordering: PhantomData} 
     }
 }
 
-impl<'a,T,S> SortedSlice<'a,T,S> {
+impl<'a,T,O> SortedSlice<'a,T,O> {
     pub fn as_slice(&self) -> &[T] {
         &self.inner
     }
 }
 
-impl<'a,T,S> PartialEq<&'a [T]> for SortedSlice<'a,T,S>
+impl<'a,T,O> PartialEq<&'a [T]> for SortedSlice<'a,T,O>
 where T: Ord
 {
     fn eq(&self, other: &&[T]) -> bool {
@@ -49,7 +49,7 @@ where T: Ord
     }
 }
 
-impl<'a,T,S> ops::Index<usize> for SortedSlice<'a,T,S>
+impl<'a,T,O> ops::Index<usize> for SortedSlice<'a,T,O>
 {
     type Output = T;
     fn index(&self, i: usize) -> &Self::Output {
@@ -67,14 +67,14 @@ impl<'a,T,S> ops::Deref for SortedSlice<'a,T,S>
 }
 */
 
-impl<'a,T,S,U> From<&'a U> for SortedSlice<'a,T,S>
+impl<'a,T,O,U> From<&'a U> for SortedSlice<'a,T,O>
 where
-    U: 'a + ops::Deref<Target=[T]> + Sorted<Ordering=S>,
+    U: 'a + ops::Deref<Target=[T]> + Sorted<Ordering=O>,
 {
     fn from(x: &'a U) -> Self {
         SortedSlice {
             inner: x.deref(),
-            order: PhantomData
+            ordering: PhantomData
         }
     }
 }
