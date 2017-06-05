@@ -31,3 +31,14 @@ fn slice_from_sorted() {
         &[1,2,4,9,33]
     );
 }
+
+#[test]
+fn sorted_vec_from_sorted_slice() {
+    let mut arr = [5,3,7,9];
+    let slice = SortedSlice::by_sorting(&mut arr, DefaultOrder);
+    let vec = SortedVec::from(slice);
+    assert_eq!(
+        vec.as_slice(),
+        [3,5,7,9]
+    );
+}

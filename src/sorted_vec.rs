@@ -35,6 +35,10 @@ impl<T,S> SortedVec<T,S> {
     pub fn as_slice(&self) -> &[T] {
         &self.inner
     }
+
+    pub fn as_vec(&self) -> &Vec<T> {
+        &self.inner
+    }
 }
 
 impl<T,S> ops::Deref for SortedVec<T,S> {
@@ -44,13 +48,27 @@ impl<T,S> ops::Deref for SortedVec<T,S> {
     }
 }
 
-/*
-impl<'a,T,S> From<&'a SortedVec<T,S>> for SortedSlice<'a,T,S>
+// The std::vec::Vec implements a From<&[T]>, so this makes sense.
+impl<'a,T,S> From<SortedSlice<'a,T,S>> for SortedVec<T,S>
+where
+    T: Clone
 {
-    fn from(v: &'a SortedVec<T,S>) -> Self {
-        SortedSlice {
-            inner: v.as_slice(),
+    fn from(s: SortedSlice<'a,T,S>) -> Self {
+        SortedVec {
+            inner: s.as_slice().to_vec(),
             order: PhantomData
+        }
+    }
+}
+
+impl<'a,T,S,U> From<U> for SortedVec<T,S>
+where
+    U: IntoIterator<Item=T> + Sorted<Ordering=S>
+{
+    fn from(x: U) -> Self {
+        SortedVec {
+            inner: x.into_iter().collect(),
+            order: PhantomData,
         }
     }
 }
@@ -61,4 +79,3 @@ impl<T,S> Into<Vec<T>> for SortedVec<T,S>
         self.inner
     }
 }
-*/
