@@ -45,9 +45,7 @@ fn sorted_vec_from_sorted_slice() {
 
 #[test]
 fn take_sorted_iterator() {
-    fn take_sorted<I>(sorted: I)
-    where I: IntoIterator<Item=i32> + Sorted
-    {
+    fn take_sorted<I>(sorted: I) where I: IntoIterator<Item=i32> + Sorted {
         let v: Vec<_> = sorted.into_iter().collect();
         assert_eq!(vec![2,3,8,10], v);
     }
