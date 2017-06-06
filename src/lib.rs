@@ -13,6 +13,6 @@ pub use sorted_iter::SortedIter;
 pub use sorted_slice::SortedSlice;
 pub use sorted_vec::SortedVec;
 pub use trait_is_sorted::IsSorted;
-pub use trait_sort_order::{SortOrder, DefaultOrder};
+pub use trait_sort_order::{SortOrder, AscendingOrder, DescendingOrder};
 pub use trait_sortable::Sortable;
 pub use type_sorted::Sorted;

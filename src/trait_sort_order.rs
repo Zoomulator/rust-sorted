@@ -11,11 +11,21 @@ pub trait SortOrder<T> : Clone + Copy {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct DefaultOrder;
+pub struct AscendingOrder;
 
-impl<T> SortOrder<T> for DefaultOrder
+impl<T> SortOrder<T> for AscendingOrder
 where T: Ord + Clone {
     fn cmp(a: &T, b: &T) -> Ordering {
         a.cmp(b)
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct DescendingOrder;
+
+impl<T> SortOrder<T> for DescendingOrder
+where T: Ord + Clone {
+    fn cmp(a: &T, b: &T) -> Ordering {
+        b.cmp(a)
     }
 }

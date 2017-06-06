@@ -14,7 +14,7 @@ order_by_key!{ KeySecondOrder:
 #[test]
 fn sorted_array() {
     let arr = [7,2,9,6];
-    let v = DefaultOrder::by_sorting(arr);
+    let v = AscendingOrder::by_sorting(arr);
     assert_eq!(
         *v.as_inner(),
         [2,6,7,9]
@@ -22,9 +22,27 @@ fn sorted_array() {
 }
 
 #[test]
+fn ascending_order() {
+    let arr = AscendingOrder::by_sorting([3,4,1,2]);
+    assert_eq!(
+        *arr.as_inner(),
+        [1,2,3,4]
+    );
+}
+
+#[test]
+fn descending_order() {
+    let arr = DescendingOrder::by_sorting([1,3,4,2]);
+    assert_eq!(
+        *arr.as_inner(),
+        [4,3,2,1]
+    );
+}
+
+#[test]
 fn sorted_slice() {
     let mut arr = [3,2,4,1];
-    let s = DefaultOrder::by_sorting(&mut arr[..]);
+    let s = AscendingOrder::by_sorting(&mut arr[..]);
     assert_eq!(
         s.as_inner(),
         &[1,2,3,4]
@@ -33,7 +51,7 @@ fn sorted_slice() {
 
 #[test]
 fn sorted_vec() {
-    let v = DefaultOrder::by_sorting(vec![4,3,1,2]);
+    let v = AscendingOrder::by_sorting(vec![4,3,1,2]);
     assert_eq!(
         v.as_slice(),
         &[1,2,3,4]
@@ -62,7 +80,7 @@ fn sort_by_second() {
 
 #[test]
 fn sorted_slice_from_sorted_vec() {
-    let vec = SortedVec::by_sorting(vec![4,9,2,33,1], DefaultOrder);
+    let vec = SortedVec::by_sorting(vec![4,9,2,33,1], AscendingOrder);
     let slice = SortedSlice::from(&vec);
     assert_eq!(
         [1,2,4,9,33][..],
@@ -73,7 +91,7 @@ fn sorted_slice_from_sorted_vec() {
 #[test]
 fn sorted_vec_from_sorted_slice() {
     let mut arr = [5,3,7,9];
-    let slice = SortedSlice::by_sorting(&mut arr, DefaultOrder);
+    let slice = SortedSlice::by_sorting(&mut arr, AscendingOrder);
     let vec = SortedVec::from(slice);
     assert_eq!(
         [3,5,7,9],
@@ -91,13 +109,13 @@ fn take_sorted_iterator() {
         );
     }
     let data: Vec<i32> = vec![3,8,2,10];
-    let vec = SortedVec::by_sorting(data, DefaultOrder);
+    let vec = SortedVec::by_sorting(data, AscendingOrder);
     take_sorted(vec);
 }
 
 #[test]
 fn sorted_insert() {
-    let mut vec = SortedVec::by_sorting(vec![4,8,2,0], DefaultOrder);
+    let mut vec = SortedVec::by_sorting(vec![4,8,2,0], AscendingOrder);
     vec.insert(6);
     assert_eq!(
         [0,2,4,6,8],
