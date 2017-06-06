@@ -1,9 +1,13 @@
 use std::cmp::Ordering;
 
-use super::Sortable;
+use super::{Sorted, Sortable};
 
 pub trait SortOrder<T> : Clone + Copy {
     fn cmp(&T, &T) -> Ordering;
+
+    fn by_sorting<'a, S: 'a + Sortable<Item=T>>(s: S) -> Sorted<'a, S, Self> {
+        Sorted::by_sorting(s)
+    }
 }
 
 #[derive(Debug, Clone, Copy)]

@@ -3,18 +3,18 @@ extern crate sorted;
 
 use sorted::*;
 
-order_by_key!{ SortByFirst:
+order_by_key!{ KeyFirstOrder:
     fn (K: Ord + Copy, T)(entry: (K,T)) -> K { entry.0 }
 }
 
-order_by_key!{ SortBySecond:
+order_by_key!{ KeySecondOrder:
     fn (K: Ord + Copy, T)(entry: (T,K)) -> K { entry.1 }
 }
 
 #[test]
 fn sorted_array() {
     let arr = [7,2,9,6];
-    let v: Sorted<_,DefaultOrder> = Sorted::by_sorting(arr);
+    let v = DefaultOrder::by_sorting(arr);
     assert_eq!(
         *v.as_inner(),
         [2,6,7,9]
@@ -24,7 +24,7 @@ fn sorted_array() {
 #[test]
 fn sorted_slice() {
     let mut arr = [3,2,4,1];
-    let s: Sorted<_,DefaultOrder> = Sorted::by_sorting(&mut arr[..]);
+    let s = DefaultOrder::by_sorting(&mut arr[..]);
     assert_eq!(
         s.as_inner(),
         &[1,2,3,4]
@@ -33,7 +33,7 @@ fn sorted_slice() {
 
 #[test]
 fn sorted_vec() {
-    let v: Sorted<_,DefaultOrder> = Sorted::by_sorting(vec![4,3,1,2]);
+    let v = DefaultOrder::by_sorting(vec![4,3,1,2]);
     assert_eq!(
         v.as_slice(),
         &[1,2,3,4]
@@ -43,7 +43,7 @@ fn sorted_vec() {
 #[test]
 fn sort_by_first() {
     let s = vec![(5,3),(2,7),(3,4)];
-    let v: Sorted<_,SortByFirst> = Sorted::by_sorting(s);
+    let v = KeyFirstOrder::by_sorting(s);
     assert_eq!(
         &[(2,7),(3,4),(5,3)],
         v.as_slice()
@@ -53,7 +53,7 @@ fn sort_by_first() {
 #[test]
 fn sort_by_second() {
     let s = vec![(5,3),(2,7),(3,4)];
-    let v = SortedVec::by_sorting(s, SortBySecond);
+    let v = KeySecondOrder::by_sorting(s);
     assert_eq!(
         &[(5,3),(3,4),(2,7)],
         v.as_slice()
