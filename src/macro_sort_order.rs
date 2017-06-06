@@ -8,7 +8,7 @@ macro_rules! order_by_key {
 
         $(impl<$($gen)*> $crate::SortOrder<$t> for $name
         {
-            fn cmp(a: &$t, b: &$t) -> $crate::sort_order_macro::Ordering {
+            fn cmp(a: &$t, b: &$t) -> $crate::macro_sort_order::Ordering {
                 fn key<$($gen)*>($entry: &$t) -> $r $blk
                 key(a).cmp(&key(b))
             }

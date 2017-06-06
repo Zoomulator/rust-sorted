@@ -3,7 +3,7 @@ use std::marker::PhantomData;
 
 use super::{
     Sortable,
-    Sorted,
+    IsSorted,
     SortOrder,
 };
 
@@ -17,7 +17,7 @@ where
     ordering: PhantomData<*const O>
 }
 
-impl<'a,T,O> Sorted for SortedSlice<'a,T,O> {
+impl<'a,T,O> IsSorted for SortedSlice<'a,T,O> {
     type Ordering = O;
 }
 
@@ -60,7 +60,7 @@ impl<'a,T,S> ops::Deref for SortedSlice<'a,T,S>
 
 impl<'a,T,O,U> From<&'a U> for SortedSlice<'a,T,O>
 where
-    U: 'a + ops::Deref<Target=[T]> + Sorted<Ordering=O>,
+    U: 'a + ops::Deref<Target=[T]> + IsSorted<Ordering=O>,
 {
     fn from(x: &'a U) -> Self {
         SortedSlice {

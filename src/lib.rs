@@ -1,19 +1,18 @@
 #[macro_use]
-mod sortable_trait;
-pub mod sort_order_macro;
-mod sort_order;
+pub mod macro_sort_order;
+
 mod sorted_iter;
 mod sorted_slice;
-mod sorted_trait;
 mod sorted_vec;
+mod trait_is_sorted;
+mod trait_sort_order;
+mod trait_sortable;
+mod type_sorted;
 
-
-pub use sortable_trait::Sortable;
-pub use sort_order::{
-    SortOrder,
-    DefaultOrder
-};
 pub use sorted_iter::SortedIter;
 pub use sorted_slice::SortedSlice;
-pub use sorted_trait::Sorted;
 pub use sorted_vec::SortedVec;
+pub use trait_is_sorted::IsSorted;
+pub use trait_sort_order::{SortOrder, DefaultOrder};
+pub use trait_sortable::Sortable;
+pub use type_sorted::Sorted;

@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use super::{
     Sortable,
     SortedIter,
-    Sorted,
+    IsSorted,
     SortOrder,
     SortedSlice,
 };
@@ -16,7 +16,7 @@ pub struct SortedVec<T,O> {
     ordering: PhantomData<*const O>
 }
 
-impl<T,O> Sorted for SortedVec<T,O> {
+impl<T,O> IsSorted for SortedVec<T,O> {
     type Ordering = O;
 }
 
@@ -71,13 +71,13 @@ where
     }
 }
 
-// Can't match FromIterator when adding Sorted bound.
+// Can't match FromIterator when adding IsSorted bound.
 // Define a new FromSortedIterator trait?
 /*
 impl<'a,T,O> std::iter::FromIterator<T> for SortedVec<T,O>
 {
     fn from_iter<I>(x: I) -> Self
-    where I: IntoIterator<Item=T> + Sorted<Ordering=O> {
+    where I: IntoIterator<Item=T> + IsSorted<Ordering=O> {
         SortedVec {
             inner: x.into_iter().collect(),
             ordering: PhantomData,

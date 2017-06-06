@@ -1,4 +1,4 @@
 
-pub trait Sorted {
+pub trait IsSorted {
     type Ordering;
 }
