@@ -8,9 +8,15 @@ use super::{
 };
 
 
-pub struct Sorted<'a,T:'a,O: 'a> {
+pub struct Sorted<'a,T:'a,O:'a> {
     collection: T,
     ordering: PhantomData<&'a O>,
+}
+
+impl<'a,T,O> Sorted<'a,T,O> {
+    pub fn as_inner(&self) -> &T {
+        &self.collection
+    }
 }
 
 impl<'a,T,O> Sorted<'a,T,O>
@@ -27,7 +33,7 @@ where
 impl<'a,T,O> Deref for Sorted<'a,T,O> {
     type Target = T;
     fn deref(&self) -> &Self::Target {
-        &self.collection
+        self.as_inner()
     }
 }
 

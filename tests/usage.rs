@@ -12,6 +12,35 @@ order_by_key!{ SortBySecond:
 }
 
 #[test]
+fn sorted_array() {
+    let arr = [7,2,9,6];
+    let v: Sorted<_,DefaultOrder> = Sorted::by_sorting(arr);
+    assert_eq!(
+        *v.as_inner(),
+        [2,6,7,9]
+    );
+}
+
+#[test]
+fn sorted_slice() {
+    let mut arr = [3,2,4,1];
+    let s: Sorted<_,DefaultOrder> = Sorted::by_sorting(&mut arr[..]);
+    assert_eq!(
+        s.as_inner(),
+        &[1,2,3,4]
+    );
+}
+
+#[test]
+fn sorted_vec() {
+    let v: Sorted<_,DefaultOrder> = Sorted::by_sorting(vec![4,3,1,2]);
+    assert_eq!(
+        v.as_slice(),
+        &[1,2,3,4]
+    );
+}
+
+#[test]
 fn sort_by_first() {
     let s = vec![(5,3),(2,7),(3,4)];
     let v: Sorted<_,SortByFirst> = Sorted::by_sorting(s);

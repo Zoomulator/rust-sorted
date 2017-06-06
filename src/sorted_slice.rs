@@ -26,8 +26,8 @@ where
     T: Ord,
     O: SortOrder<T>
 {
-    pub fn by_sorting(inner: &'a mut [T], _: O) -> Self {
-        Sortable::sort(&mut *inner, O::cmp);
+    pub fn by_sorting(mut inner: &'a mut [T], _: O) -> Self {
+        Sortable::sort(&mut inner, O::cmp);
         Self {inner, ordering: PhantomData} 
     }
 }
