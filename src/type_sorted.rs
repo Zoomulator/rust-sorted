@@ -2,10 +2,11 @@ use std::ops::Deref;
 use std::marker::PhantomData;
 use std::cmp::Ordering;
 use super::{
-    SortedIter,
     IsSorted,
+    SortOrder,
     Sortable,
-    SortOrder
+    SortedInsert,
+    SortedIter,
 };
 
 
@@ -54,6 +55,17 @@ where
         Self{collection, ordering: PhantomData}
     }
 }
+
+impl<'a,T,O> Sorted<'a,T,O>
+where
+    T: Sortable + SortedInsert<<T as Sortable>::Item>,
+    O: SortOrder<T::Item>
+{
+    pub fn insert(&mut self, x: T::Item) {
+        self.collection.insert::<O>(x)
+    }
+}
+
 impl<'a,T,O> Sorted<'a,T,O>
 where
     T: Sortable,

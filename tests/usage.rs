@@ -117,7 +117,7 @@ fn take_sorted_iterator() {
 
 #[test]
 fn sorted_insert() {
-    let mut vec = SortedVec::by_sorting(vec![4,8,2,0], AscendingOrder);
+    let mut vec = AscendingOrder::by_sorting(vec![4,8,2,0]);
     vec.insert(6);
     assert_eq!(
         [0,2,4,6,8],
