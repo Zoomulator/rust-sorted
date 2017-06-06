@@ -94,3 +94,16 @@ fn sorted_insert() {
     vec.insert(6);
     assert_eq!([0, 2, 4, 6, 8], vec.as_slice());
 }
+
+#[cfg(feature = "unstable")]
+#[test]
+fn sorted_vec_from_sorted_iterator() {
+    type SortedVec<'a, T, O> = Sorted<'a, Vec<T>, O>;
+    let v0 = AscendingOrder::by_sorting(vec![3,1,4,2]);
+    let it = v0.into_iter();
+    let v1 = SortedVec::from_iter(it);
+    assert_eq!(
+        &[1,2,3,4],
+        v1.as_slice()
+    );
+}

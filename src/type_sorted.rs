@@ -1,3 +1,6 @@
+#[cfg(feature = "unstable")]
+use std::iter::FromIterator;
+
 use std::ops::Deref;
 use std::marker::PhantomData;
 use std::cmp::Ordering;
@@ -29,7 +32,7 @@ impl<'a, T, O> Sorted<'a, T, O> {
     // This assumes that the conversion always preserves order.
     // The bound `U: Sortable` mitigates this. You can't convert to say
     // Sorted<BinaryHeap> or something that is guaranteed to be unordered.
-    // It'll be market as unstable since I believe this gives a weak guarantee
+    // It'll be marked as unstable since I believe this gives a weak guarantee
     // and might not be added.
     #[cfg(feature = "unstable")]
     pub fn from<'b, U>(sorted: Sorted<U, O>) -> Self
@@ -39,6 +42,19 @@ impl<'a, T, O> Sorted<'a, T, O> {
         Sorted {
             collection: From::from(sorted.collection),
             ordering: PhantomData,
+        }
+    }
+
+    // Again, weak guarantee that FromIterator for T doesn't alter sort order.
+    #[cfg(feature = "unstable")]
+    pub fn from_iter<I,J>(iter: I) -> Sorted<'a, T, O>
+        where I: IntoIterator<IntoIter=SortedIter<J,O>, Item=T::Item>,
+              J: Iterator<Item=<T as Sortable>::Item>,
+              T: Sortable + FromIterator<<T as Sortable>::Item>,
+    {
+        Sorted {
+            collection: iter.into_iter().collect(),
+            ordering: PhantomData
         }
     }
 }
