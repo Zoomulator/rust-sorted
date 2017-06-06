@@ -2,6 +2,7 @@ use std::ops::Deref;
 use std::marker::PhantomData;
 use std::cmp::Ordering;
 use super::{
+    SortedIter,
     IsSorted,
     Sortable,
     SortOrder
@@ -91,5 +92,19 @@ impl <'a,T,O> Sortable for Sorted<'a,T,O> where T: Sortable {
     fn search<F>(&self, x: &Self::Item, f: F) -> Result<usize, usize>
     where F: FnMut(&Self::Item, &Self::Item) -> Ordering {
         self.collection.search(x, f)
+    }
+}
+
+impl<'a,T,O> IntoIterator for Sorted<'a,T,O>
+where
+    T: IntoIterator<Item=<T as Sortable>::Item> + Sortable,
+{
+    type Item = <T as Sortable>::Item;
+    type IntoIter = SortedIter<T::IntoIter,O>;
+    fn into_iter(self) -> Self::IntoIter {
+        SortedIter {
+            inner: self.collection.into_iter(),
+            ordering: PhantomData
+        }
     }
 }

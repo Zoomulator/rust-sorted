@@ -111,8 +111,7 @@ fn take_sorted_iterator() {
             v
         );
     }
-    let data: Vec<i32> = vec![3,8,2,10];
-    let vec = SortedVec::by_sorting(data, AscendingOrder);
+    let vec = AscendingOrder::by_sorting(vec![3,8,2,10]);
     take_sorted(vec);
 }
 
