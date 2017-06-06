@@ -80,18 +80,21 @@ fn sort_by_second() {
 
 #[test]
 fn sorted_slice_from_sorted_vec() {
-    let vec = SortedVec::by_sorting(vec![4,9,2,33,1], AscendingOrder);
-    let slice = SortedSlice::from(&vec);
-    assert_eq!(
-        [1,2,4,9,33][..],
-        *slice
-    );
+    fn take_sorted_slice<'a>(slice: Sorted<'a, &'a [i32], AscendingOrder>) {
+        assert_eq!(
+            &[1,2,4,9,33][..],
+            *slice
+        );
+    }
+    let vec = AscendingOrder::by_sorting(vec![4,9,2,33,1]);
+    take_sorted_slice(vec.as_ref());
 }
 
 #[test]
 fn sorted_vec_from_sorted_slice() {
+    type SortedVec<'a,T,O> = Sorted<'a,Vec<T>,O>;
     let mut arr = [5,3,7,9];
-    let slice = SortedSlice::by_sorting(&mut arr, AscendingOrder);
+    let slice = AscendingOrder::by_sorting(&mut arr[..]);
     let vec = SortedVec::from(slice);
     assert_eq!(
         [3,5,7,9],

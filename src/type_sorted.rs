@@ -17,6 +17,30 @@ impl<'a,T,O> Sorted<'a,T,O> {
     pub fn as_inner(&self) -> &T {
         &self.collection
     }
+
+    pub fn deref_inner<U>(&'a self) -> Sorted<'a,&U,O>
+    where
+        U: ?Sized,
+        T: Deref<Target=U>
+    {
+        Sorted {
+            collection: Deref::deref(&self.collection),
+            ordering: PhantomData,
+        }
+    }
+
+    // This could unfortunatly not be implemented as the trait From, due to
+    // colliding with the blanket impl of From<T> for T.
+    pub fn from<'b,U>(sorted: Sorted<U,O>) -> Self
+    where
+        T: From<U>,
+        U: Sortable,
+    {
+        Sorted {
+            collection: From::from(sorted.collection),
+            ordering: PhantomData
+        }
+    }
 }
 
 impl<'a,T,O> Sorted<'a,T,O>
@@ -27,6 +51,21 @@ where
     pub fn by_sorting(mut collection: T) -> Self {
         collection.sort(O::cmp);
         Self{collection, ordering: PhantomData}
+    }
+}
+impl<'a,T,O> Sorted<'a,T,O>
+where
+    T: Sortable,
+{
+    /// Similar to Option::as_ref. It's mapping the inner type with AsRef.
+    pub fn as_ref<U>(&self) -> Sorted<'a,&U,O> where
+        T: AsRef<U>,
+        U: ?Sized
+    {
+        Sorted {
+            collection: AsRef::as_ref(&self.collection),
+            ordering: PhantomData
+        }
     }
 }
 
