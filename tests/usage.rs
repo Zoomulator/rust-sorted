@@ -91,6 +91,7 @@ fn sorted_slice_from_sorted_vec() {
 }
 
 #[test]
+#[cfg(feature="unstable")]
 fn sorted_vec_from_sorted_slice() {
     type SortedVec<'a,T,O> = Sorted<'a,Vec<T>,O>;
     let mut arr = [5,3,7,9];

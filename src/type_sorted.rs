@@ -33,6 +33,12 @@ impl<'a,T,O> Sorted<'a,T,O> {
 
     // This could unfortunatly not be implemented as the trait From, due to
     // colliding with the blanket impl of From<T> for T.
+    // This assumes that the conversion always preserves order.
+    // The bound `U: Sortable` mitigates this. You can't convert to say
+    // Sorted<BinaryHeap> or something that is guaranteed to be unordered.
+    // It'll be market as unstable since I believe this gives a weak guarantee
+    // and might not be added.
+    #[cfg(feature = "unstable")]
     pub fn from<'b,U>(sorted: Sorted<U,O>) -> Self
     where
         T: From<U>,
