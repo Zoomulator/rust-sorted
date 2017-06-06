@@ -13,115 +13,84 @@ order_by_key!{ KeySecondOrder:
 
 #[test]
 fn sorted_array() {
-    let arr = [7,2,9,6];
+    let arr = [7, 2, 9, 6];
     let v = AscendingOrder::by_sorting(arr);
-    assert_eq!(
-        *v.as_inner(),
-        [2,6,7,9]
-    );
+    assert_eq!(*v.as_inner(), [2, 6, 7, 9]);
 }
 
 #[test]
 fn ascending_order() {
-    let arr = AscendingOrder::by_sorting([3,4,1,2]);
-    assert_eq!(
-        *arr.as_inner(),
-        [1,2,3,4]
-    );
+    let arr = AscendingOrder::by_sorting([3, 4, 1, 2]);
+    assert_eq!(*arr.as_inner(), [1, 2, 3, 4]);
 }
 
 #[test]
 fn descending_order() {
-    let arr = DescendingOrder::by_sorting([1,3,4,2]);
-    assert_eq!(
-        *arr.as_inner(),
-        [4,3,2,1]
-    );
+    let arr = DescendingOrder::by_sorting([1, 3, 4, 2]);
+    assert_eq!(*arr.as_inner(), [4, 3, 2, 1]);
 }
 
 #[test]
 fn sorted_slice() {
-    let mut arr = [3,2,4,1];
+    let mut arr = [3, 2, 4, 1];
     let s = AscendingOrder::by_sorting(&mut arr[..]);
-    assert_eq!(
-        s.as_inner(),
-        &[1,2,3,4]
-    );
+    assert_eq!(s.as_inner(), &[1, 2, 3, 4]);
 }
 
 #[test]
 fn sorted_vec() {
-    let v = AscendingOrder::by_sorting(vec![4,3,1,2]);
-    assert_eq!(
-        v.as_slice(),
-        &[1,2,3,4]
-    );
+    let v = AscendingOrder::by_sorting(vec![4, 3, 1, 2]);
+    assert_eq!(v.as_slice(), &[1, 2, 3, 4]);
 }
 
 #[test]
 fn sort_by_first() {
-    let s = vec![(5,3),(2,7),(3,4)];
+    let s = vec![(5, 3), (2, 7), (3, 4)];
     let v = KeyFirstOrder::by_sorting(s);
-    assert_eq!(
-        &[(2,7),(3,4),(5,3)],
-        v.as_slice()
-    );
+    assert_eq!(&[(2, 7), (3, 4), (5, 3)], v.as_slice());
 }
 
 #[test]
 fn sort_by_second() {
-    let s = vec![(5,3),(2,7),(3,4)];
+    let s = vec![(5, 3), (2, 7), (3, 4)];
     let v = KeySecondOrder::by_sorting(s);
-    assert_eq!(
-        &[(5,3),(3,4),(2,7)],
-        v.as_slice()
-    );
+    assert_eq!(&[(5, 3), (3, 4), (2, 7)], v.as_slice());
 }
 
 #[test]
 fn sorted_slice_from_sorted_vec() {
     fn take_sorted_slice<'a>(slice: Sorted<'a, &'a [i32], AscendingOrder>) {
-        assert_eq!(
-            &[1,2,4,9,33][..],
-            *slice
-        );
+        assert_eq!(&[1, 2, 4, 9, 33][..], *slice);
     }
-    let vec = AscendingOrder::by_sorting(vec![4,9,2,33,1]);
+    let vec = AscendingOrder::by_sorting(vec![4, 9, 2, 33, 1]);
     take_sorted_slice(vec.as_ref());
 }
 
 #[test]
 #[cfg(feature="unstable")]
 fn sorted_vec_from_sorted_slice() {
-    type SortedVec<'a,T,O> = Sorted<'a,Vec<T>,O>;
-    let mut arr = [5,3,7,9];
+    type SortedVec<'a, T, O> = Sorted<'a, Vec<T>, O>;
+    let mut arr = [5, 3, 7, 9];
     let slice = AscendingOrder::by_sorting(&mut arr[..]);
     let vec = SortedVec::from(slice);
-    assert_eq!(
-        [3,5,7,9],
-        vec.as_slice()
-    );
+    assert_eq!([3, 5, 7, 9], vec.as_slice());
 }
 
 #[test]
 fn take_sorted_iterator() {
-    fn take_sorted<I>(sorted: I) where I: IntoIterator<Item=i32> + IsSorted {
+    fn take_sorted<I>(sorted: I)
+        where I: IntoIterator<Item = i32> + IsSorted
+    {
         let v: Vec<_> = sorted.into_iter().collect();
-        assert_eq!(
-            vec![2,3,8,10],
-            v
-        );
+        assert_eq!(vec![2, 3, 8, 10], v);
     }
-    let vec = AscendingOrder::by_sorting(vec![3,8,2,10]);
+    let vec = AscendingOrder::by_sorting(vec![3, 8, 2, 10]);
     take_sorted(vec);
 }
 
 #[test]
 fn sorted_insert() {
-    let mut vec = AscendingOrder::by_sorting(vec![4,8,2,0]);
+    let mut vec = AscendingOrder::by_sorting(vec![4, 8, 2, 0]);
     vec.insert(6);
-    assert_eq!(
-        [0,2,4,6,8],
-        vec.as_slice()
-    );
+    assert_eq!([0, 2, 4, 6, 8], vec.as_slice());
 }

@@ -3,48 +3,41 @@ use std::cmp::Ordering;
 pub trait Sortable {
     type Item;
 
-    fn sort<F>(&mut self, f: F)
-    where F: FnMut(&Self::Item, &Self::Item) -> Ordering;
+    fn sort<F>(&mut self, f: F) where F: FnMut(&Self::Item, &Self::Item) -> Ordering;
 
     fn search<F>(&self, &Self::Item, F) -> Result<usize, usize>
-    where F: FnMut(&Self::Item, &Self::Item) -> Ordering;
+        where F: FnMut(&Self::Item, &Self::Item) -> Ordering;
 }
 
-impl<T> Sortable for Vec<T>
-{
+impl<T> Sortable for Vec<T> {
     type Item = T;
 
     fn sort<F>(&mut self, f: F)
-    where
-        F: FnMut(&Self::Item, &Self::Item) -> Ordering
+        where F: FnMut(&Self::Item, &Self::Item) -> Ordering
     {
         self.sort_by(f);
     }
 
     fn search<F>(&self, a: &T, mut f: F) -> Result<usize, usize>
-    where
-        F: FnMut(&Self::Item, &Self::Item) -> Ordering
+        where F: FnMut(&Self::Item, &Self::Item) -> Ordering
     {
-        self.binary_search_by(|b| f(b,a))
+        self.binary_search_by(|b| f(b, a))
     }
 }
 
-impl<'a,T> Sortable for &'a mut [T]
-{
+impl<'a, T> Sortable for &'a mut [T] {
     type Item = T;
 
     fn sort<F>(&mut self, f: F)
-    where
-        F: FnMut(&Self::Item, &Self::Item) -> Ordering
+        where F: FnMut(&Self::Item, &Self::Item) -> Ordering
     {
         self.sort_by(f);
     }
 
     fn search<F>(&self, a: &T, mut f: F) -> Result<usize, usize>
-    where
-        F: FnMut(&Self::Item, &Self::Item) -> Ordering
+        where F: FnMut(&Self::Item, &Self::Item) -> Ordering
     {
-        self.binary_search_by(|b| f(a,b))
+        self.binary_search_by(|b| f(a, b))
     }
 }
 
