@@ -2,6 +2,8 @@
 pub mod macro_sort_order;
 
 mod sorted_iter;
+mod std_slice;
+mod std_vec;
 mod trait_is_sorted;
 mod trait_sort_order;
 mod trait_sortable;
