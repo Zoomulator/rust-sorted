@@ -27,6 +27,15 @@ impl<'a, T, O> Sorted<'a, T, O> {
         }
     }
 
+    pub fn iter(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter,O>
+        where &'a T: IntoIterator
+    {
+        SortedIter {
+            inner: IntoIterator::into_iter(&self.collection),
+            ordering: PhantomData
+        }
+    }
+
     // This could unfortunatly not be implemented as the trait From, due to
     // colliding with the blanket impl of From<T> for T.
     // This assumes that the conversion always preserves order.

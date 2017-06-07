@@ -89,6 +89,18 @@ fn take_sorted_iterator() {
 }
 
 #[test]
+fn take_sorted_ref_iterator() {
+    fn take_sorted_ref<'a,I>(sorted: I)
+        where I: IntoIterator<Item = &'a i32> + IsSorted
+    {
+        let v: Vec<_> = sorted.into_iter().cloned().collect();
+        assert_eq!([1,2,3,4], v.as_slice());
+    }
+    let vec = AscendingOrder::by_sorting(vec![3,4,1,2]);
+    take_sorted_ref(vec.iter());
+}
+
+#[test]
 fn sorted_insert() {
     let mut vec = AscendingOrder::by_sorting(vec![4, 8, 2, 0]);
     vec.insert(6);
