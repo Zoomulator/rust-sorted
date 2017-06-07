@@ -67,6 +67,12 @@ fn sorted_slice_from_sorted_vec() {
 }
 
 /// TODO: Can you get a Sorted<'a, &vec, O> from Sorted::as_ref?
+#[test]
+fn uhm() {
+    let vec = AscendingOrder::by_sorting(vec![3,2,4,1]);
+    let rvec: Sorted<&Vec<i32>, AscendingOrder> = vec.as_ref();
+    rvec.as_slice();
+}
 
 #[test]
 #[cfg(feature="unstable")]

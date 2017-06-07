@@ -121,7 +121,7 @@ impl<'a, T, O> Sorted<'a, T, O>
     /// Similar to Option::as_ref. It's mapping the inner type with AsRef.
     pub fn as_ref<U>(&self) -> Sorted<'a, &U, O>
         where T: AsRef<U>,
-              U: ?Sized
+              U: ?Sized + RetainsOrder
     {
         Sorted {
             collection: AsRef::as_ref(&self.collection),
@@ -153,3 +153,17 @@ impl<'a, T, O> IntoIterator for Sorted<'a, T, O>
         }
     }
 }
+
+/*
+impl<'a, I, T, O> IntoIterator for &'a Sorted<'a, T, O>
+    where &'a T: IntoIterator<Item = <I as Iterator>::Item, IntoIter=I>,
+          T: Sortable,
+          I: Iterator + Sortable
+{
+    type Item = <&'a T as IntoIterator>::Item;
+    type IntoIter = SortedIter<<&'a T as IntoIterator>::IntoIter, O>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+*/
