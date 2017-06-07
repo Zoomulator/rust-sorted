@@ -66,6 +66,8 @@ fn sorted_slice_from_sorted_vec() {
     take_sorted_slice(vec.as_ref());
 }
 
+/// TODO: Can you get a Sorted<'a, &vec, O> from Sorted::as_ref?
+
 #[test]
 #[cfg(feature="unstable")]
 fn sorted_vec_from_sorted_slice() {
@@ -107,7 +109,6 @@ fn sorted_insert() {
     assert_eq!([0, 2, 4, 6, 8], vec.as_slice());
 }
 
-#[cfg(feature = "unstable")]
 #[test]
 fn sorted_vec_from_sorted_iterator() {
     type SortedVec<'a, T, O> = Sorted<'a, Vec<T>, O>;

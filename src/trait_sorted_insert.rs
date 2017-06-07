@@ -1,5 +1,7 @@
-use super::{Sortable, SortOrder};
+use super::{SearchableByOrder, SortOrder};
 
-pub trait SortedInsert<T>: Sortable {
-    fn insert<O>(&mut self, Self::Item) where O: SortOrder<T>;
+pub trait SortedInsert<O>: SearchableByOrder<O>
+where O: SortOrder<Self::Item>
+{
+    fn insert(&mut self, Self::Item);
 }
