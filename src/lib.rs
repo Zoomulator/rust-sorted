@@ -12,6 +12,7 @@ mod trait_sort_order;
 mod trait_sortable;
 mod trait_sorted_insert;
 mod type_sorted;
+mod union_iter;
 
 pub use sorted_iter::SortedIter;
 pub use trait_collection::Collection;
@@ -25,3 +26,4 @@ pub use trait_sort_order::keys;
 pub use trait_sortable::Sortable;
 pub use trait_sorted_insert::SortedInsert;
 pub use type_sorted::Sorted;
+pub use union_iter::UnionExt;
