@@ -58,7 +58,7 @@ fn sort_by_second() {
 }
 
 #[test]
-fn sort_by_property() {
+fn sort_with_property_key_type() {
     #[derive(Debug, Clone, Copy, PartialEq)]
     struct Record { stuff: i32, id: u32 };
     impl Record {
@@ -68,9 +68,7 @@ fn sort_by_property() {
     struct IdKey;
     impl Key<Record> for IdKey {
         type Key = u32;
-        fn key(r: &Record) -> Self::Key {
-            r.id
-        }
+        fn key(r: &Record) -> Self::Key { r.id }
     }
 
     let v = KeyOrder::<IdKey, AscendingOrder>::by_sorting(
@@ -79,6 +77,32 @@ fn sort_by_property() {
     assert_eq!(
         &v.as_slice(),
         &[Record::new(1), Record::new(2), Record::new(3)]
+    );
+}
+
+#[test]
+fn sort_by_property_string() {
+    use std::cmp::Ordering;
+    #[derive(Debug, Clone, PartialEq)]
+    struct Person { name: String, x: i32 };
+    impl Person {
+        pub fn new(n: &str) -> Self {
+            Self { name: n.to_string(), x: 0 }
+        }
+    }
+    #[derive(Debug, Clone, Copy)]
+    struct OrderByName;
+    impl SortOrder<Person> for OrderByName {
+        fn cmp(a: &Person, b: &Person) -> Ordering {
+            a.name.cmp(&b.name)
+        }
+    }
+    let v = OrderByName::by_sorting(
+        vec![Person::new("Bob"), Person::new("Cecil"), Person::new("Alice")]
+    );
+    assert_eq!(
+        v.as_slice(),
+        &[Person::new("Alice"), Person::new("Bob"), Person::new("Cecil")]
     );
 }
 
