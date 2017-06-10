@@ -54,21 +54,6 @@ pub trait Key<T> {
     fn key(&T) -> Self::Key;
 }
 
-/*
-#[derive(Debug,Clone,Copy)]
-pub struct Key0;
-
-// Defined for each tuple length.
-impl<K,T> Key<(K,T)> for Key0
-where K: Copy
-{
-    type Key = K;
-    fn key(x: &(K,T)) -> Self::Key {
-        x.0
-    }
-}
-*/
-
 pub mod keys {
     use super::Key;
 

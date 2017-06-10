@@ -57,25 +57,28 @@ fn sort_by_second() {
     assert_eq!(&[(5, 3, 9), (3, 4, 4), (2, 7, 2)], v.as_slice());
 }
 
+#[test]
 fn sort_by_property() {
-    struct Person { name: String }
-    impl Person {
-        pub fn new(n: &str) -> Self { Person{ name: n.to_string() } }
+    #[derive(Debug, Clone, Copy, PartialEq)]
+    struct Record { stuff: i32, id: u32 };
+    impl Record {
+        pub fn new(n: u32) -> Self { Record{ stuff: 0, id: n} }
     }
-    struct NameKey;
-    impl Key<Person> for NameKey {
-        type for<'r> Key = &'r str;
-        fn key(p: &Person) -> &str {
-            &p.name
+    #[derive(Debug, Clone, Copy)]
+    struct IdKey;
+    impl Key<Record> for IdKey {
+        type Key = u32;
+        fn key(r: &Record) -> Self::Key {
+            r.id
         }
     }
 
-    let v = KeyOrder::<NameKey, AscendingOrder>::by_sorting(
-        vec![Person::new("Bob"), Person::new("Cecil"), Person::new("Alice")]
+    let v = KeyOrder::<IdKey, AscendingOrder>::by_sorting(
+        vec![Record::new(2), Record::new(3), Record::new(1)]
     );
     assert_eq!(
-        v.as_slice(),
-        &[Person::new("Alice"), Person::new("Bob"), Person::new("Cecil")]
+        &v.as_slice(),
+        &[Record::new(1), Record::new(2), Record::new(3)]
     );
 }
 
