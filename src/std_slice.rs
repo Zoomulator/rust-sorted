@@ -43,6 +43,21 @@ impl<'a, T, O> SearchableByOrder<O> for &'a [T]
 
 impl<'a, T> RetainsOrder for &'a [T] {}
 
+impl<T> Collection for [T] {
+    type Item = T;
+}
+
+impl<T> RetainsOrder for [T] {}
+
+impl<T,O> SearchableByOrder<O> for [T]
+    where O: SortOrder<T>
+{
+    fn search(&self, a: &T) -> Result<usize, usize>
+    {
+        self.binary_search_by(|b| O::cmp(a, b))
+    }
+}
+
 // Impl traits for [T;n]
 
 macro_rules! arr_traits {
