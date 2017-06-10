@@ -3,7 +3,7 @@ extern crate sorted;
 
 use sorted::*;
 
-order_by_key!{ KeyFirstOrder:
+order_by_key!{ Key0AscOrder:
     fn (K: Ord + Copy, T)(entry: (K,T)) -> K { entry.0 }
 }
 
@@ -46,15 +46,37 @@ fn sorted_vec() {
 #[test]
 fn sort_by_first() {
     let s = vec![(5, 3), (2, 7), (3, 4)];
-    let v = KeyFirstOrder::by_sorting(s);
+    let v = KeyOrder::<keys::Key0, AscendingOrder>::by_sorting(s);
     assert_eq!(&[(2, 7), (3, 4), (5, 3)], v.as_slice());
 }
 
 #[test]
 fn sort_by_second() {
-    let s = vec![(5, 3), (2, 7), (3, 4)];
-    let v = KeySecondOrder::by_sorting(s);
-    assert_eq!(&[(5, 3), (3, 4), (2, 7)], v.as_slice());
+    let s = vec![(5, 3, 9), (2, 7, 2), (3, 4, 4)];
+    let v = KeyOrder::<keys::Key2, DescendingOrder>::by_sorting(s);
+    assert_eq!(&[(5, 3, 9), (3, 4, 4), (2, 7, 2)], v.as_slice());
+}
+
+fn sort_by_property() {
+    struct Person { name: String }
+    impl Person {
+        pub fn new(n: &str) -> Self { Person{ name: n.to_string() } }
+    }
+    struct NameKey;
+    impl Key<Person> for NameKey {
+        type for<'r> Key = &'r str;
+        fn key(p: &Person) -> &str {
+            &p.name
+        }
+    }
+
+    let v = KeyOrder::<NameKey, AscendingOrder>::by_sorting(
+        vec![Person::new("Bob"), Person::new("Cecil"), Person::new("Alice")]
+    );
+    assert_eq!(
+        v.as_slice(),
+        &[Person::new("Alice"), Person::new("Bob"), Person::new("Cecil")]
+    );
 }
 
 #[test]
