@@ -13,3 +13,16 @@ fn union_iter() {
         v2.as_slice()
     );
 }
+
+#[test]
+fn difference_iter() {
+    let v0 = AscendingOrder::by_sorting(vec![1,1,2,2,3,4,4,5]);
+    let v1 = AscendingOrder::by_sorting(vec![0,1,3,3,4,7,9]);
+    let v2 = Sorted::<Vec<_>,_>::from_iter(
+        v0.into_iter().difference(v1.into_iter())
+    );
+    assert_eq!(
+        [2,2,5],
+        v2.as_slice()
+    );
+}

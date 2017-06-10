@@ -49,14 +49,15 @@ where I: Iterator + IsSorted,
 
 
 pub trait UnionExt where Self: Iterator + Sized + IsSorted {
-    fn union<J>(self, J) -> Union<Self,J> where J: IsSorted + Iterator;
+    fn union<J>(self, J) -> Union<Self,J>
+    where J: IsSorted<Ordering=Self::Ordering> + Iterator<Item=Self::Item>;
 }
 
 impl<I> UnionExt for I
 where I: IsSorted + Iterator
 {
     fn union<J>(self, j: J) -> Union<Self,J>
-    where J: IsSorted + Iterator
+    where J: IsSorted<Ordering=Self::Ordering> + Iterator<Item=Self::Item>
     {
         Union { i: self, j, a: None, b: None }
     }
