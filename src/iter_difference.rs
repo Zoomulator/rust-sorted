@@ -27,22 +27,20 @@ where I: Iterator + IsSorted,
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
-        let mut n = None;
-        while n.is_none() {
+        loop {
             let a = self.a.take().or_else(|| self.i.next());
             let b = self.b.take().or_else(|| self.j.next());
-            n = match (a,b) {
+            match (a,b) {
                 (Some(a), Some(b)) => {
-                    if a < b { self.b = Some(b); Some(Some(a)) }
-                    else if b < a { self.a = Some(a); None }
-                    else { self.b = Some(b); None }
+                    if a < b { self.b = Some(b); return Some(a) }
+                    else if b < a { self.a = Some(a); }
+                    else { self.b = Some(b); }
                 },
-                (None, None) => Some(None),
-                (a, None) => Some(a),
-                (None, _) => None
+                (None, None) => return None,
+                (a, None) => return a,
+                (None, _) => (),
             }
         }
-        n.and_then(|o|o) // flatten Option<Option<>>
     }
 }
 
