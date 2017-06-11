@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Sorted` struct in crate `sorted`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Sorted">
+
+    <title>sorted::Sorted - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'>Struct Sorted</p><div class="block items"><ul><li><a href="#methods">Methods</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='index.html'>sorted</a></p><script>window.sidebarCurrent = {name: 'Sorted', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>sorted</a>::<wbr><a class="struct" href=''>Sorted</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/sorted/type_sorted.rs.html#16-19' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Sorted&lt;'a, T:&nbsp;'a, O:&nbsp;'a&gt; { /* fields omitted */ }</pre><div class='docblock'><p>Guarantees that the inner container is sorted in a specific order.</p>
+
+<p>The <a href="trait.Sortable.html"><code>Sortable</code></a> trait is a requirement for all containers T being wrapped
+with <code>Sorted&lt;T&gt;</code> to enforce certain guarantees for operations that arent
+strictly read only (i.e creating iterators). See the documentation of
+<a href="trait.Sortable.html"><code>Sortable</code></a> for details.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#22-84' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.as_inner' class="method"><span id='as_inner.v' class='invisible'><code>fn <a href='#method.as_inner' class='fnname'>as_inner</a>(&amp;self) -&gt; &amp;T</code></span></h4>
+<h4 id='method.deref_inner' class="method"><span id='deref_inner.v' class='invisible'><code>fn <a href='#method.deref_inner' class='fnname'>deref_inner</a>&lt;U:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>&gt;(&amp;'a self) -&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, &amp;U, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;U: ,<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html" title="trait core::ops::Deref">Deref</a>&lt;Target = U&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.iter' class="method"><span id='iter.v' class='invisible'><code>fn <a href='#method.iter' class='fnname'>iter</a>(&amp;'a self) -&gt; <a class="struct" href="../sorted/struct.SortedIter.html" title="struct sorted::SortedIter">SortedIter</a>&lt;&lt;&amp;T as <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a>&gt;::<a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIter</a>, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'a T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a>,&nbsp;</span></code></span></h4>
+<h4 id='method.from_iter' class="method"><span id='from_iter.v' class='invisible'><code>fn <a href='#method.from_iter' class='fnname'>from_iter</a>&lt;I&gt;(iter: I) -&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../sorted/trait.RetainsOrder.html" title="trait sorted::RetainsOrder">RetainsOrder</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.FromIterator.html" title="trait core::iter::traits::FromIterator">FromIterator</a>&lt;&lt;T as <a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Collection</a>&gt;::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;I: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a>&lt;Item = T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt; + <a class="trait" href="../sorted/trait.IsSorted.html" title="trait sorted::IsSorted">IsSorted</a>&lt;Ordering = O&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;I as <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a>&gt;::<a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIter</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/iterator/trait.Iterator.html" title="trait core::iter::iterator::Iterator">Iterator</a> + <a class="trait" href="../sorted/trait.IsSorted.html" title="trait sorted::IsSorted">IsSorted</a>&lt;Ordering = O&gt;,&nbsp;</span></code></span></h4>
+<div class='docblock'><p>Builds a sorted collection of type T from a sorted iterator.</p>
+
+<p>As the [<code>RetainsOrder</code>] trait is required to be implemented for T, it&#39;s
+guaranteed that the order of the input iterator is preserved. Since the
+iterator must implement IsSorted, you&#39;ll safely get a sorted collection.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../sorted/trait.Sortable.html" title="trait sorted::Sortable">Sortable</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;O: <a class="trait" href="../sorted/trait.SortOrder.html" title="trait sorted::SortOrder">SortOrder</a>&lt;T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt;,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#86-97' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.by_sorting' class="method"><span id='by_sorting.v' class='invisible'><code>fn <a href='#method.by_sorting' class='fnname'>by_sorting</a>(collection: T) -&gt; Self</code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../sorted/trait.SearchableByOrder.html" title="trait sorted::SearchableByOrder">SearchableByOrder</a>&lt;O&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;O: <a class="trait" href="../sorted/trait.SortOrder.html" title="trait sorted::SortOrder">SortOrder</a>&lt;T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt;,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#99-106' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.search' class="method"><span id='search.v' class='invisible'><code>fn <a href='#method.search' class='fnname'>search</a>(&amp;self, a: &amp;T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../sorted/trait.Sortable.html" title="trait sorted::Sortable">Sortable</a> + <a class="trait" href="../sorted/trait.SortedInsert.html" title="trait sorted::SortedInsert">SortedInsert</a>&lt;O&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;O: <a class="trait" href="../sorted/trait.SortOrder.html" title="trait sorted::SortOrder">SortOrder</a>&lt;T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt;,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#108-115' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.insert' class="method"><span id='insert.v' class='invisible'><code>fn <a href='#method.insert' class='fnname'>insert</a>(&amp;mut self, x: T::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>)</code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#117-128' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.as_ref' class="method"><span id='as_ref.v' class='invisible'><code>fn <a href='#method.as_ref' class='fnname'>as_ref</a>&lt;U:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>&gt;(&amp;self) -&gt; <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, &amp;U, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;U&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;U: <a class="trait" href="../sorted/trait.RetainsOrder.html" title="trait sorted::RetainsOrder">RetainsOrder</a>,&nbsp;</span></code></span></h4>
+<div class='docblock'><p>Similar to Option::as_ref. It&#39;s mapping the inner type with AsRef.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html" title="trait core::ops::Deref">Deref</a> for <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#130-135' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Target' class="type"><span id='Target.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#associatedtype.Target' class="type">Target</a> = T</code></span></h4>
+<div class='docblock'><p>The resulting type after dereferencing</p>
+</div><h4 id='method.deref' class="method"><span id='deref.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#tymethod.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;Self::<a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html" title="trait core::ops::Deref">Target</a></code></span></h4>
+<div class='docblock'><p>The method called to dereference a value</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="trait" href="../sorted/trait.IsSorted.html" title="trait sorted::IsSorted">IsSorted</a> for <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#137-139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Ordering' class="type"><span id='Ordering.t' class='invisible'><code>type <a href='../sorted/trait.IsSorted.html#associatedtype.Ordering' class="type">Ordering</a> = O</code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl&lt;'a, T, O&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a> for <a class="struct" href="../sorted/struct.Sorted.html" title="struct sorted::Sorted">Sorted</a>&lt;'a, T, O&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIterator</a>&lt;Item = &lt;T as <a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Collection</a>&gt;::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a>&gt; + <a class="trait" href="../sorted/trait.Sortable.html" title="trait sorted::Sortable">Sortable</a>,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/sorted/type_sorted.rs.html#141-152' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Item' class="type"><span id='Item.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html#associatedtype.Item' class="type">Item</a> = &lt;T as <a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Collection</a>&gt;::<a class="trait" href="../sorted/trait.Collection.html" title="trait sorted::Collection">Item</a></code></span></h4>
+<div class='docblock'><p>The type of the elements being iterated over.</p>
+</div><h4 id='associatedtype.IntoIter' class="type"><span id='IntoIter.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html#associatedtype.IntoIter' class="type">IntoIter</a> = <a class="struct" href="../sorted/struct.SortedIter.html" title="struct sorted::SortedIter">SortedIter</a>&lt;T::<a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIter</a>, O&gt;</code></span></h4>
+<div class='docblock'><p>Which kind of iterator are we turning this into?</p>
+</div><h4 id='method.into_iter' class="method"><span id='into_iter.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html#tymethod.into_iter' class='fnname'>into_iter</a>(self) -&gt; Self::<a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html" title="trait core::iter::traits::IntoIterator">IntoIter</a></code></span></h4>
+<div class='docblock'><p>Creates an iterator from a value. <a href="https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html#tymethod.into_iter">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "sorted";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

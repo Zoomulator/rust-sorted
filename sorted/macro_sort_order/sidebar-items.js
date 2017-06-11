@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Ordering","An `Ordering` is the result of a comparison between two values."]]});
