@@ -1,6 +1,8 @@
 # Sorted
 Distributed under the [MIT license](./LICENSE).
 
+[Documentation](https://zoomulator.github.io/rust-sorted/sorted/)
+
 ## What
 A Rust library that provides compile time contracts for sorted sequences.
 
