@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use super::{SortOrder, IsSorted};
 
 
@@ -32,9 +33,11 @@ where I: Iterator + IsSorted,
             let b = self.b.take().or_else(|| self.j.next());
             match (a,b) {
                 (Some(a), Some(b)) => {
-                    if a < b { self.b = Some(b); return Some(a) }
-                    else if b < a { self.a = Some(a); }
-                    else { self.b = Some(b); }
+                    match I::Ordering::cmp(&a,&b) {
+                        Ordering::Less => { self.b = Some(b); return Some(a) }
+                        Ordering::Greater => { self.a = Some(a); }
+                        Ordering::Equal => { self.b = Some(b); }
+                    }
                 },
                 (None, None) => return None,
                 (a, None) => return a,
