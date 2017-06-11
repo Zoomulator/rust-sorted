@@ -3,8 +3,8 @@ use std::iter::FromIterator;
 
 use std::ops::Deref;
 use std::marker::PhantomData;
-use super::{Collection, IsSorted, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedIter,
-            SearchableByOrder};
+use super::{Collection, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedIter,
+            SortedIterator, SearchableByOrder};
 
 /// Guarantees that the inner container is sorted in a specific order.
 ///
@@ -69,12 +69,13 @@ impl<'a, T, O> Sorted<'a, T, O> {
     ///
     /// As the [`RetainsOrder`] trait is required to be implemented for T, it's
     /// guaranteed that the order of the input iterator is preserved. Since the
-    /// iterator must implement IsSorted, you'll safely get a sorted collection.
+    /// iterator must implement SortedIterator, you'll safely get a sorted collection.
     /// [`Sortable`]: trait.Sortable.html
     pub fn from_iter<I>(iter: I) -> Sorted<'a, T, O>
         where T: RetainsOrder + FromIterator<<T as Collection>::Item>,
-              I: IntoIterator<Item = T::Item> + IsSorted<Ordering = O>,
-              <I as IntoIterator>::IntoIter: Iterator + IsSorted<Ordering = O>
+              I: IntoIterator<Item = T::Item>,
+              I::IntoIter: SortedIterator<Ordering = O>,
+              <I as IntoIterator>::IntoIter: SortedIterator<Ordering = O>
     {
         Sorted {
             collection: iter.into_iter().collect(),
@@ -132,10 +133,6 @@ impl<'a, T, O> Deref for Sorted<'a, T, O> {
     fn deref(&self) -> &Self::Target {
         self.as_inner()
     }
-}
-
-impl<'a, T, O> IsSorted for Sorted<'a, T, O> {
-    type Ordering = O;
 }
 
 impl<'a, T, O> IntoIterator for Sorted<'a, T, O>

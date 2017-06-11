@@ -1,10 +1,11 @@
 use std::cmp::Ordering;
-use super::{SortOrder, IsSorted};
+use super::{SortOrder, SortedIterator};
 
 
 pub struct Union<I, J>
-    where I: Iterator + IsSorted,
-          J: Iterator + IsSorted
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>,
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     i: I,
     j: J,
@@ -13,20 +14,19 @@ pub struct Union<I, J>
 }
 
 
-impl<I, J> IsSorted for Union<I, J>
-    where I: Iterator + IsSorted,
+impl<I, J> SortedIterator for Union<I, J>
+    where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,
-          J: Iterator + IsSorted<Ordering = I::Ordering>
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Ordering = I::Ordering;
 }
 
 
 impl<I, J> Iterator for Union<I, J>
-    where I: Iterator + IsSorted,
-          J: Iterator<Item = I::Item> + IsSorted,
-          I::Item: Ord,
-          I::Ordering: SortOrder<I::Item>
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>,
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
@@ -52,17 +52,19 @@ impl<I, J> Iterator for Union<I, J>
 
 
 pub trait UnionExt
-    where Self: Iterator + Sized + IsSorted
+    where Self: SortedIterator + Sized,
+          Self::Ordering: SortOrder<Self::Item>
 {
     fn union<J>(self, J) -> Union<Self, J>
-        where J: IsSorted<Ordering = Self::Ordering> + Iterator<Item = Self::Item>;
+        where J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>;
 }
 
 impl<I> UnionExt for I
-    where I: IsSorted + Iterator
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>
 {
     fn union<J>(self, j: J) -> Union<Self, J>
-        where J: IsSorted<Ordering = Self::Ordering> + Iterator<Item = Self::Item>
+        where J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>
     {
         Union {
             i: self,

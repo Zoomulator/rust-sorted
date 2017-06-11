@@ -1,10 +1,11 @@
 use std::cmp::Ordering;
-use super::{SortOrder, IsSorted};
+use super::{SortOrder, SortedIterator};
 
 
 pub struct Difference<I, J>
-    where I: Iterator + IsSorted,
-          J: Iterator + IsSorted
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>,
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     i: I,
     j: J,
@@ -12,19 +13,18 @@ pub struct Difference<I, J>
     b: Option<J::Item>,
 }
 
-impl<I, J> IsSorted for Difference<I, J>
-    where I: Iterator + IsSorted,
+impl<I, J> SortedIterator for Difference<I, J>
+    where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,
-          J: Iterator<Item = I::Item> + IsSorted<Ordering = I::Ordering>
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Ordering = I::Ordering;
 }
 
 impl<I, J> Iterator for Difference<I, J>
-    where I: Iterator + IsSorted,
-          I::Item: Ord,
+    where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,
-          J: Iterator<Item = I::Item> + IsSorted<Ordering = I::Ordering>
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
@@ -56,17 +56,19 @@ impl<I, J> Iterator for Difference<I, J>
 
 
 pub trait DifferenceExt
-    where Self: Sized + Iterator + IsSorted
+    where Self: SortedIterator + Sized,
+          Self::Ordering: SortOrder<Self::Item>
 {
     fn difference<J>(self, j: J) -> Difference<Self, J>
-        where J: Sized + Iterator<Item = Self::Item> + IsSorted<Ordering = Self::Ordering>;
+        where J: SortedIterator<Item = Self::Item, Ordering = Self::Ordering>;
 }
 
 impl<I> DifferenceExt for I
-    where I: Sized + Iterator + IsSorted
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>
 {
     fn difference<J>(self, j: J) -> Difference<Self, J>
-        where J: Sized + Iterator<Item = Self::Item> + IsSorted<Ordering = Self::Ordering>
+        where J: SortedIterator<Item = Self::Item, Ordering = Self::Ordering>
     {
         Difference {
             i: self,

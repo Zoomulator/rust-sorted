@@ -1,5 +1,5 @@
 use std::marker::PhantomData;
-use super::IsSorted;
+use super::SortedIterator;
 
 pub struct SortedIter<I, O> {
     pub(crate) inner: I,
@@ -15,6 +15,8 @@ impl<I, O> Iterator for SortedIter<I, O>
     }
 }
 
-impl<I, O> IsSorted for SortedIter<I, O> {
+impl<I, O> SortedIterator for SortedIter<I, O>
+    where I: Iterator
+{
     type Ordering = O;
 }

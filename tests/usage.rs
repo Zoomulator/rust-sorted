@@ -160,9 +160,10 @@ fn sorted_vec_from_sorted_slice() {
 
 #[test]
 fn take_sorted_iterator() {
-    // Sorted types can generate IsSorted iterators.
+    // Sorted types can generate SortedIterators.
     fn take_sorted<I>(sorted: I)
-        where I: IntoIterator<Item = i32> + IsSorted
+        where I: IntoIterator<Item = i32>,
+              I::IntoIter: SortedIterator<Ordering = AscendingOrder>,
     {
         let v: Vec<_> = sorted.into_iter().collect();
         assert_eq!(vec![2, 3, 8, 10], v);
@@ -176,7 +177,8 @@ fn take_sorted_ref_iterator() {
     // By-ref iterators can only be created via Sorted::iter() right now.
     // I.e there is no IntoIterator for &Sorted<>.
     fn take_sorted_ref<'a,I>(sorted: I)
-        where I: IntoIterator<Item = &'a i32> + IsSorted
+        where I: IntoIterator<Item = &'a i32>,
+              I::IntoIter: SortedIterator
     {
         let v: Vec<_> = sorted.into_iter().cloned().collect();
         assert_eq!([1,2,3,4], v.as_slice());

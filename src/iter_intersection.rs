@@ -1,9 +1,10 @@
 use std::cmp::Ordering;
-use super::{SortOrder, IsSorted};
+use super::{SortOrder, SortedIterator};
 
 pub struct Intersection<I, J>
-    where I: Iterator + IsSorted,
-          J: Iterator + IsSorted
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>,
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     i: I,
     j: J,
@@ -12,19 +13,18 @@ pub struct Intersection<I, J>
 }
 
 
-impl<I, J> IsSorted for Intersection<I, J>
-    where I: Iterator + IsSorted,
+impl<I, J> SortedIterator for Intersection<I, J>
+    where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,
-          J: Iterator<Item = I::Item> + IsSorted<Ordering = I::Ordering>
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Ordering = I::Ordering;
 }
 
 impl<I, J> Iterator for Intersection<I, J>
-    where I: Iterator + IsSorted,
-          I::Item: Ord,
+    where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,
-          J: Iterator<Item = I::Item> + IsSorted<Ordering = I::Ordering>
+          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
 {
     type Item = I::Item;
 
@@ -48,17 +48,19 @@ impl<I, J> Iterator for Intersection<I, J>
 
 
 pub trait IntersectionExt
-    where Self: Sized + Iterator + IsSorted
+    where Self: SortedIterator + Sized,
+          Self::Ordering: SortOrder<Self::Item>
 {
     fn intersection<J>(self, J) -> Intersection<Self, J>
-        where J: Iterator<Item = Self::Item> + IsSorted<Ordering = Self::Ordering>;
+        where J: SortedIterator<Item = Self::Item, Ordering = Self::Ordering>;
 }
 
 impl<I> IntersectionExt for I
-    where I: Sized + Iterator + IsSorted
+    where I: SortedIterator,
+          I::Ordering: SortOrder<I::Item>
 {
     fn intersection<J>(self, j: J) -> Intersection<Self, J>
-        where J: Iterator<Item = Self::Item> + IsSorted<Ordering = Self::Ordering>
+        where J: SortedIterator<Item = Self::Item, Ordering = Self::Ordering>
     {
         Intersection {
             i: self,
