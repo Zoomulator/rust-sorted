@@ -5,9 +5,9 @@ authors = ["Kim Simmons <zoomulator@gmail.com>"]
 readme = "README.markdown"
 keywords = ["sort", "collection"]
 categories = ["rust-patterns"]
-license = "MIT"
 license-file = "./LICENSE"
 description = "Provides compile time guarantees for sorted sequences."
+documentation = "https://zoomulator.github.io/rust-sorted/sorted/"
 
 [features]
 default = []
