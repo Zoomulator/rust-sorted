@@ -5,6 +5,8 @@ Distributed under the [MIT license](./LICENSE).
 A Rust library that provides compile time contracts for sorted sequences.
 
 ## Status
+[![Build Status](https://travis-ci.org/Zoomulator/rust-sorted.svg?branch=master)](https://travis-ci.org/Zoomulator/rust-sorted)
+
 This library is currently being drafted and is not fit for any use at this time.
 
 ## Reasoning
