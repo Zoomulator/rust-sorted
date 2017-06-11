@@ -1,10 +1,9 @@
 # Sorted
+A Rust library that provides compile time contracts for sorted sequences.
+
 Distributed under the [MIT license](./LICENSE).
 
 [Documentation](https://zoomulator.github.io/rust-sorted/sorted/)
-
-## What
-A Rust library that provides compile time contracts for sorted sequences.
 
 ## Status
 [![Latest version on crates.io](https://img.shields.io/crates/v/sorted.svg)](https://crates.io/crates/sorted)
