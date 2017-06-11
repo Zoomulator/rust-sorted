@@ -26,3 +26,16 @@ fn difference_iter() {
         v2.as_slice()
     );
 }
+
+#[test]
+fn intersection_iter() {
+    let v0 = AscendingOrder::by_sorting(vec![1,2,5,6,8]);
+    let v1 = AscendingOrder::by_sorting(vec![1,3,6,7]);
+    let v2 = Sorted::<Vec<_>,_>::from_iter(
+        v0.into_iter().intersection(v1.into_iter())
+    );
+    assert_eq!(
+        [1,6],
+        v2.as_slice()
+    );
+}

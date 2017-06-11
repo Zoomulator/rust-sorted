@@ -2,6 +2,7 @@
 pub mod macro_sort_order;
 
 mod iter_difference;
+mod iter_intersection;
 mod iter_union;
 mod sorted_iter;
 mod std_slice;
@@ -16,6 +17,7 @@ mod trait_sorted_insert;
 mod type_sorted;
 
 pub use iter_union::UnionExt;
+pub use iter_intersection::IntersectionExt;
 pub use iter_difference::DifferenceExt;
 pub use sorted_iter::SortedIter;
 pub use trait_collection::Collection;
