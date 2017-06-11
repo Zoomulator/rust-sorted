@@ -8,6 +8,7 @@ categories = ["rust-patterns"]
 license-file = "./LICENSE"
 description = "Provides compile time guarantees for sorted sequences."
 documentation = "https://zoomulator.github.io/rust-sorted/sorted/"
+repository = "https://github.com/Zoomulator/rust-sorted"
 
 [features]
 default = []
