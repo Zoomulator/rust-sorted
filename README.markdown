@@ -7,6 +7,7 @@ Distributed under the [MIT license](./LICENSE).
 A Rust library that provides compile time contracts for sorted sequences.
 
 ## Status
+[![Latest version on crates.io](https://img.shields.io/crates/v/sorted.svg)](https://crates.io/crates/sorted)
 [![Build Status](https://travis-ci.org/Zoomulator/rust-sorted.svg?branch=master)](https://travis-ci.org/Zoomulator/rust-sorted)
 
 This library is currently being drafted and is not fit for any use at this time.
