@@ -3,10 +3,8 @@ use std::iter::FromIterator;
 
 use std::ops::Deref;
 use std::marker::PhantomData;
-use super::{
-    Collection, IsSorted, RetainsOrder, SortOrder, Sortable,
-    SortedInsert, SortedIter, SearchableByOrder
-};
+use super::{Collection, IsSorted, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedIter,
+            SearchableByOrder};
 
 /// Guarantees that the inner container is sorted in a specific order.
 ///
@@ -36,12 +34,12 @@ impl<'a, T, O> Sorted<'a, T, O> {
         }
     }
 
-    pub fn iter(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter,O>
+    pub fn iter(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter, O>
         where &'a T: IntoIterator
     {
         SortedIter {
             inner: IntoIterator::into_iter(&self.collection),
-            ordering: PhantomData
+            ordering: PhantomData,
         }
     }
 
@@ -75,12 +73,12 @@ impl<'a, T, O> Sorted<'a, T, O> {
     /// [`Sortable`]: trait.Sortable.html
     pub fn from_iter<I>(iter: I) -> Sorted<'a, T, O>
         where T: RetainsOrder + FromIterator<<T as Collection>::Item>,
-              I: IntoIterator<Item=T::Item> + IsSorted<Ordering=O>,
-              <I as IntoIterator>::IntoIter: Iterator + IsSorted<Ordering=O>,
+              I: IntoIterator<Item = T::Item> + IsSorted<Ordering = O>,
+              <I as IntoIterator>::IntoIter: Iterator + IsSorted<Ordering = O>
     {
         Sorted {
             collection: iter.into_iter().collect(),
-            ordering: PhantomData
+            ordering: PhantomData,
         }
     }
 }
@@ -116,8 +114,7 @@ impl<'a, T, O> Sorted<'a, T, O>
     }
 }
 
-impl<'a, T, O> Sorted<'a, T, O>
-{
+impl<'a, T, O> Sorted<'a, T, O> {
     /// Similar to Option::as_ref. It's mapping the inner type with AsRef.
     pub fn as_ref<U>(&self) -> Sorted<'a, &U, O>
         where T: AsRef<U>,

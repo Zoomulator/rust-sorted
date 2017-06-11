@@ -15,11 +15,10 @@ impl<'a, T> Sortable for &'a mut [T] {
     }
 }
 
-impl<'a, T, O> SearchableByOrder<O> for &'a mut [T] where
-    O: SortOrder<T>
+impl<'a, T, O> SearchableByOrder<O> for &'a mut [T]
+    where O: SortOrder<T>
 {
-    fn search(&self, a: &T) -> Result<usize, usize>
-    {
+    fn search(&self, a: &T) -> Result<usize, usize> {
         self.binary_search_by(|b| O::cmp(a, b))
     }
 }
@@ -35,9 +34,8 @@ impl<'a, T> Collection for &'a [T] {
 impl<'a, T, O> SearchableByOrder<O> for &'a [T]
     where O: SortOrder<T>
 {
-    fn search(&self, a: &T) -> Result<usize, usize>
-    {
-        self.binary_search_by(|b| O::cmp(a, b))        
+    fn search(&self, a: &T) -> Result<usize, usize> {
+        self.binary_search_by(|b| O::cmp(a, b))
     }
 }
 
@@ -49,11 +47,10 @@ impl<T> Collection for [T] {
 
 impl<T> RetainsOrder for [T] {}
 
-impl<T,O> SearchableByOrder<O> for [T]
+impl<T, O> SearchableByOrder<O> for [T]
     where O: SortOrder<T>
 {
-    fn search(&self, a: &T) -> Result<usize, usize>
-    {
+    fn search(&self, a: &T) -> Result<usize, usize> {
         self.binary_search_by(|b| O::cmp(a, b))
     }
 }

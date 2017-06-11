@@ -35,14 +35,13 @@ impl<T> SortOrder<T> for DescendingOrder
 
 
 #[derive(Debug, Clone, Copy)]
-pub struct KeyOrder<K,O> {
-    key: PhantomData<(K,O)>
+pub struct KeyOrder<K, O> {
+    key: PhantomData<(K, O)>,
 }
 
-impl<T,K,O> SortOrder<T> for KeyOrder<K,O>
-where
-    K: Key<T> + Copy,
-    O: SortOrder<K::Key>
+impl<T, K, O> SortOrder<T> for KeyOrder<K, O>
+    where K: Key<T> + Copy,
+          O: SortOrder<K::Key>
 {
     fn cmp(a: &T, b: &T) -> Ordering {
         O::cmp(&K::key(a), &K::key(b))
