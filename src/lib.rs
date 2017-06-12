@@ -1,3 +1,5 @@
+//! Find it on [github](https://github.com/Zoomulator/rust-sorted).
+
 #[macro_use]
 pub mod macro_sort_order;
 
