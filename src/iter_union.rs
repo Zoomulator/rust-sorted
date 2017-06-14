@@ -2,6 +2,7 @@ use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
 
 
+#[derive(Debug)]
 pub struct Union<I, J>
     where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,

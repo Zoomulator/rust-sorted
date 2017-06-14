@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
 
+#[derive(Debug)]
 pub struct Intersection<I, J>
     where I: SortedIterator,
           I::Ordering: SortOrder<I::Item>,

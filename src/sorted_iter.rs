@@ -1,6 +1,7 @@
 use std::marker::PhantomData;
 use super::SortedIterator;
 
+#[derive(Debug)]
 pub struct SortedIter<I, O> {
     pub(crate) inner: I,
     pub(crate) ordering: PhantomData<O>,

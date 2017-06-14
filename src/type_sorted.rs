@@ -13,6 +13,7 @@ use super::{Collection, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedI
 /// strictly read only (i.e creating iterators). See the documentation of
 /// [`Sortable`] for details.
 /// [`Sortable`]: trait.Sortable.html
+#[derive(Debug, PartialEq, Eq)]
 pub struct Sorted<'a, T: 'a, O: 'a> {
     collection: T,
     ordering: PhantomData<&'a O>,
