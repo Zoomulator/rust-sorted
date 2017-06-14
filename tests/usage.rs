@@ -216,3 +216,12 @@ fn sorted_vec_from_sorted_iterator() {
     let v1 = SortedVec::from_iter(it);
     assert_eq!(&[1, 2, 3, 4], v1.as_slice());
 }
+
+#[test]
+fn building_from_empty_vec() {
+    let mut v: Sorted<Vec<i32>,AscendingOrder> = Default::default();
+    v.insert(3);
+    v.insert(1);
+    v.insert(2);
+    assert_eq!(&[1,2,3], v.as_slice());
+}

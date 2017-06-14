@@ -20,6 +20,18 @@ pub struct Sorted<'a, T: 'a, O: 'a> {
 }
 
 
+impl<'a, T, O> Default for Sorted<'a, T, O> 
+    where T: Default + Collection
+{
+    fn default() -> Self {
+        Sorted {
+            collection: Default::default(),
+            ordering: PhantomData
+        }
+    }
+}
+
+
 impl<'a, T, O> Sorted<'a, T, O> {
     pub fn as_inner(&self) -> &T {
         &self.collection
