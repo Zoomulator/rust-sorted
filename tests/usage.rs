@@ -142,7 +142,7 @@ fn sorted_slice_from_sorted_vec() {
     // The as_ref works like Option::as_ref; it returns a Sorted type with the
     // inner type being a reference to the original. If the inner type implements
     // the correct AsRef, it'll work.
-    fn take_sorted_slice<'a>(slice: Sorted<'a, &'a [i32], AscendingOrder>) {
+    fn take_sorted_slice<'a>(slice: Sorted<&'a [i32], AscendingOrder>) {
         assert_eq!(&[1, 2, 4, 9, 33][..], *slice);
     }
     let vec = AscendingOrder::by_sorting(vec![4, 9, 2, 33, 1]);
@@ -151,7 +151,7 @@ fn sorted_slice_from_sorted_vec() {
 
 #[test]
 fn sorted_vec_ref() {
-    fn take_sorted_vec<'a>(refvec: Sorted<'a, &'a Vec<i32>, AscendingOrder>) {
+    fn take_sorted_vec<'a>(refvec: Sorted<&'a Vec<i32>, AscendingOrder>) {
         assert_eq!(&[1, 2, 3, 4], refvec.as_slice())
     }
     let vec = AscendingOrder::by_sorting(vec![3, 2, 4, 1]);
@@ -161,7 +161,7 @@ fn sorted_vec_ref() {
 #[test]
 #[cfg(feature="unstable")]
 fn sorted_vec_from_sorted_slice() {
-    type SortedVec<'a, T, O> = Sorted<'a, Vec<T>, O>;
+    type SortedVec<T, O> = Sorted<Vec<T>, O>;
     let mut arr = [5, 3, 7, 9];
     let slice = AscendingOrder::by_sorting(&mut arr[..]);
     // This is currently unstable as it doesn't seem possible to guarantee sortedness.
@@ -210,7 +210,7 @@ fn sorted_insert() {
 #[test]
 fn sorted_vec_from_sorted_iterator() {
     // You can create Sorted collections from Sorted iterators.
-    type SortedVec<'a, T, O> = Sorted<'a, Vec<T>, O>;
+    type SortedVec<T, O> = Sorted<Vec<T>, O>;
     let v0 = AscendingOrder::by_sorting(vec![3, 1, 4, 2]);
     let it = v0.into_iter();
     let v1 = SortedVec::from_iter(it);

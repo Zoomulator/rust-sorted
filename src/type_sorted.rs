@@ -14,13 +14,13 @@ use super::{Collection, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedI
 /// [`Sortable`] for details.
 /// [`Sortable`]: trait.Sortable.html
 #[derive(Debug, PartialEq, Eq)]
-pub struct Sorted<'a, T: 'a, O: 'a> {
+pub struct Sorted<T, O> {
     collection: T,
-    ordering: PhantomData<&'a O>,
+    ordering: PhantomData<O>,
 }
 
 
-impl<'a, T, O> Default for Sorted<'a, T, O> 
+impl<T, O> Default for Sorted<T, O> 
     where T: Default + Collection
 {
     fn default() -> Self {
@@ -32,12 +32,12 @@ impl<'a, T, O> Default for Sorted<'a, T, O>
 }
 
 
-impl<'a, T, O> Sorted<'a, T, O> {
+impl<T, O> Sorted<T, O> {
     pub fn as_inner(&self) -> &T {
         &self.collection
     }
 
-    pub fn deref_inner<U>(&'a self) -> Sorted<'a, &U, O>
+    pub fn deref_inner<'a, U>(&'a self) -> Sorted<&'a U, O>
         where U: ?Sized,
               T: Deref<Target = U>
     {
@@ -47,7 +47,7 @@ impl<'a, T, O> Sorted<'a, T, O> {
         }
     }
 
-    pub fn iter(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter, O>
+    pub fn iter<'a>(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter, O>
         where &'a T: IntoIterator
     {
         SortedIter {
@@ -84,7 +84,7 @@ impl<'a, T, O> Sorted<'a, T, O> {
     /// guaranteed that the order of the input iterator is preserved. Since the
     /// iterator must implement SortedIterator, you'll safely get a sorted collection.
     /// [`Sortable`]: trait.Sortable.html
-    pub fn from_iter<I>(iter: I) -> Sorted<'a, T, O>
+    pub fn from_iter<I>(iter: I) -> Sorted<T, O>
         where T: RetainsOrder + FromIterator<<T as Collection>::Item>,
               I: IntoIterator<Item = T::Item>,
               I::IntoIter: SortedIterator<Ordering = O>,
@@ -97,7 +97,7 @@ impl<'a, T, O> Sorted<'a, T, O> {
     }
 }
 
-impl<'a, T, O> Sorted<'a, T, O>
+impl<T, O> Sorted<T, O>
     where T: Sortable,
           O: SortOrder<T::Item>
 {
@@ -110,7 +110,7 @@ impl<'a, T, O> Sorted<'a, T, O>
     }
 }
 
-impl<'a, T, O> Sorted<'a, T, O>
+impl<T, O> Sorted<T, O>
     where T: SearchableByOrder<O>,
           O: SortOrder<T::Item>
 {
@@ -119,7 +119,7 @@ impl<'a, T, O> Sorted<'a, T, O>
     }
 }
 
-impl<'a, T, O> Sorted<'a, T, O>
+impl<T, O> Sorted<T, O>
     where T: Sortable + SortedInsert<O>,
           O: SortOrder<T::Item>
 {
@@ -128,9 +128,9 @@ impl<'a, T, O> Sorted<'a, T, O>
     }
 }
 
-impl<'a, T, O> Sorted<'a, T, O> {
+impl<T, O> Sorted<T, O> {
     /// Similar to Option::as_ref. It's mapping the inner type with AsRef.
-    pub fn as_ref<U>(&self) -> Sorted<'a, &U, O>
+    pub fn as_ref<U>(&self) -> Sorted<&U, O>
         where T: AsRef<U>,
               U: ?Sized + RetainsOrder
     {
@@ -141,14 +141,14 @@ impl<'a, T, O> Sorted<'a, T, O> {
     }
 }
 
-impl<'a, T, O> Deref for Sorted<'a, T, O> {
+impl<T, O> Deref for Sorted<T, O> {
     type Target = T;
     fn deref(&self) -> &Self::Target {
         self.as_inner()
     }
 }
 
-impl<'a, T, O> IntoIterator for Sorted<'a, T, O>
+impl<T, O> IntoIterator for Sorted<T, O>
     where T: IntoIterator<Item = <T as Collection>::Item> + Sortable
 {
     type Item = <T as Collection>::Item;
