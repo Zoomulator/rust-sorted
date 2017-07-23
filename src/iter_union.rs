@@ -2,6 +2,9 @@ use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
 
 
+/// Adaptor iterator which outputs the union of two sorted iterators in
+/// linear time. Duplicates are preserved. It's suggested to adapt with dedup
+/// from crate itertools if you want a unique union.
 #[derive(Debug)]
 pub struct Union<I, J>
     where I: SortedIterator,

@@ -2,6 +2,9 @@ use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
 
 
+
+/// Adaptor iterator which outputs the difference of two sorted iterators in
+/// linear time.
 #[derive(Debug)]
 pub struct Difference<I, J>
     where I: SortedIterator,
@@ -56,6 +59,8 @@ impl<I, J> Iterator for Difference<I, J>
 }
 
 
+/// Extension class for sorted iterators to provide the difference iterator
+/// constructor.
 pub trait DifferenceExt
     where Self: SortedIterator + Sized,
           Self::Ordering: SortOrder<Self::Item>

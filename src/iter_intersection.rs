@@ -1,6 +1,8 @@
 use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
 
+/// Adaptor iterator which outputs the intersection of two sorted iterators in
+/// linear time. Will ouput the unique items (deduped).
 #[derive(Debug)]
 pub struct Intersection<I, J>
     where I: SortedIterator,
