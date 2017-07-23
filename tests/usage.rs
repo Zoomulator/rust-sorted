@@ -57,7 +57,7 @@ fn sort_by_first() {
 }
 
 #[test]
-fn sort_by_second() {
+fn sort_by_third() {
     let s = vec![(5, 3, 9), (2, 7, 2), (3, 4, 4)];
     let v = KeyOrder::<keys::Key2, DescendingOrder>::by_sorting(s);
     assert_eq!(&[(5, 3, 9), (3, 4, 4), (2, 7, 2)], v.as_slice());
