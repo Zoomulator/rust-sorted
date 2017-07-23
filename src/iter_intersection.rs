@@ -37,8 +37,8 @@ impl<I, J> Iterator for Intersection<I, J>
                 (Some(a), Some(b)) => {
                     match I::Ordering::cmp(&a, &b) {
                         Ordering::Equal => return Some(a),
-                        Ordering::Less => self.b = Some(b),
-                        Ordering::Greater => self.a = Some(a),
+                        Ordering::Less => (),
+                        Ordering::Greater => (),
                     }
                 }
                 _ => return None,
