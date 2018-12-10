@@ -1,5 +1,5 @@
-use std::marker::PhantomData;
 use super::SortedIterator;
+use std::marker::PhantomData;
 
 #[derive(Debug)]
 pub struct SortedIter<I, O> {
@@ -8,7 +8,8 @@ pub struct SortedIter<I, O> {
 }
 
 impl<I, O> Iterator for SortedIter<I, O>
-    where I: Iterator
+where
+    I: Iterator,
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
@@ -17,7 +18,8 @@ impl<I, O> Iterator for SortedIter<I, O>
 }
 
 impl<I, O> SortedIterator for SortedIter<I, O>
-    where I: Iterator
+where
+    I: Iterator,
 {
     type Ordering = O;
 }

@@ -1,5 +1,5 @@
+use super::{Collection, RetainsOrder, SearchableByOrder, SortOrder, Sortable};
 use std::cmp::Ordering;
-use super::{Collection, SearchableByOrder, RetainsOrder, SortOrder, Sortable};
 
 // Impl traits for &mut [T].
 
@@ -9,14 +9,16 @@ impl<'a, T> Collection for &'a mut [T] {
 
 impl<'a, T> Sortable for &'a mut [T] {
     fn sort<F>(&mut self, f: F)
-        where F: FnMut(&Self::Item, &Self::Item) -> Ordering
+    where
+        F: FnMut(&Self::Item, &Self::Item) -> Ordering,
     {
         self.sort_by(f);
     }
 }
 
 impl<'a, T, O> SearchableByOrder<O> for &'a mut [T]
-    where O: SortOrder<T>
+where
+    O: SortOrder<T>,
 {
     fn search(&self, a: &T) -> Result<usize, usize> {
         self.binary_search_by(|b| O::cmp(a, b))
@@ -32,7 +34,8 @@ impl<'a, T> Collection for &'a [T] {
 }
 
 impl<'a, T, O> SearchableByOrder<O> for &'a [T]
-    where O: SortOrder<T>
+where
+    O: SortOrder<T>,
 {
     fn search(&self, a: &T) -> Result<usize, usize> {
         self.binary_search_by(|b| O::cmp(a, b))
@@ -48,7 +51,8 @@ impl<T> Collection for [T] {
 impl<T> RetainsOrder for [T] {}
 
 impl<T, O> SearchableByOrder<O> for [T]
-    where O: SortOrder<T>
+where
+    O: SortOrder<T>,
 {
     fn search(&self, a: &T) -> Result<usize, usize> {
         self.binary_search_by(|b| O::cmp(a, b))

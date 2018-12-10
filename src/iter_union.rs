@@ -1,15 +1,15 @@
-use std::cmp::Ordering;
 use super::{SortOrder, SortedIterator};
-
+use std::cmp::Ordering;
 
 /// Adaptor iterator which outputs the union of two sorted iterators in
 /// linear time. Duplicates are preserved. It's suggested to adapt with dedup
 /// from crate itertools if you want a unique union.
 #[derive(Debug)]
 pub struct Union<I, J>
-    where I: SortedIterator,
-          I::Ordering: SortOrder<I::Item>,
-          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
+where
+    I: SortedIterator,
+    I::Ordering: SortOrder<I::Item>,
+    J: SortedIterator<Item = I::Item, Ordering = I::Ordering>,
 {
     i: I,
     j: J,
@@ -17,20 +17,20 @@ pub struct Union<I, J>
     b: Option<J::Item>,
 }
 
-
 impl<I, J> SortedIterator for Union<I, J>
-    where I: SortedIterator,
-          I::Ordering: SortOrder<I::Item>,
-          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
+where
+    I: SortedIterator,
+    I::Ordering: SortOrder<I::Item>,
+    J: SortedIterator<Item = I::Item, Ordering = I::Ordering>,
 {
     type Ordering = I::Ordering;
 }
 
-
 impl<I, J> Iterator for Union<I, J>
-    where I: SortedIterator,
-          I::Ordering: SortOrder<I::Item>,
-          J: SortedIterator<Item = I::Item, Ordering = I::Ordering>
+where
+    I: SortedIterator,
+    I::Ordering: SortOrder<I::Item>,
+    J: SortedIterator<Item = I::Item, Ordering = I::Ordering>,
 {
     type Item = I::Item;
     fn next(&mut self) -> Option<Self::Item> {
@@ -54,21 +54,24 @@ impl<I, J> Iterator for Union<I, J>
     }
 }
 
-
 pub trait UnionExt
-    where Self: SortedIterator + Sized,
-          Self::Ordering: SortOrder<Self::Item>
+where
+    Self: SortedIterator + Sized,
+    Self::Ordering: SortOrder<Self::Item>,
 {
     fn union<J>(self, J) -> Union<Self, J>
-        where J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>;
+    where
+        J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>;
 }
 
 impl<I> UnionExt for I
-    where I: SortedIterator,
-          I::Ordering: SortOrder<I::Item>
+where
+    I: SortedIterator,
+    I::Ordering: SortOrder<I::Item>,
 {
     fn union<J>(self, j: J) -> Union<Self, J>
-        where J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>
+    where
+        J: SortedIterator<Ordering = Self::Ordering, Item = Self::Item>,
     {
         Union {
             i: self,

@@ -4,7 +4,8 @@ use super::{Collection, SortOrder};
 
 /// Defines an interface for collections that can be searched when sorted.
 pub trait SearchableByOrder<O>: Collection
-    where O: SortOrder<Self::Item>
+where
+    O: SortOrder<Self::Item>,
 {
     fn search(&self, &Self::Item) -> Result<usize, usize>;
 }
