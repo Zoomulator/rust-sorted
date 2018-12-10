@@ -3,11 +3,11 @@ extern crate sorted;
 
 use sorted::*;
 
-order_by_key!{ Key0AscOrder:
+order_by_key! { Key0AscOrder:
     fn (K: Ord + Copy, T)(entry: (K,T)) -> K { entry.0 }
 }
 
-order_by_key!{ KeySecondOrder:
+order_by_key! { KeySecondOrder:
     fn (K: Ord + Copy, T)(entry: (T,K)) -> K { entry.1 }
 }
 
@@ -89,11 +89,15 @@ fn sort_with_property_key_type() {
     }
 
     // You can now sort the Records by a property in any order.
-    let v = KeyOrder::<IdKey, AscendingOrder>::by_sorting(vec![Record::new(2),
-                                                               Record::new(3),
-                                                               Record::new(1)]);
-    assert_eq!(&v.as_slice(),
-               &[Record::new(1), Record::new(2), Record::new(3)]);
+    let v = KeyOrder::<IdKey, AscendingOrder>::by_sorting(vec![
+        Record::new(2),
+        Record::new(3),
+        Record::new(1),
+    ]);
+    assert_eq!(
+        &v.as_slice(),
+        &[Record::new(1), Record::new(2), Record::new(3)]
+    );
 }
 
 #[test]
@@ -128,13 +132,19 @@ fn sort_by_property_string() {
     // It will only provide one ordering for what you define, so if you need to
     // support multiple ways of ordering by name it will result in a bit of
     // boilerplate.
-    let v = OrderByName::by_sorting(vec![Person::new("Bob"),
-                                         Person::new("Cecil"),
-                                         Person::new("Alice")]);
-    assert_eq!(v.as_slice(),
-               &[Person::new("Alice"),
-                 Person::new("Bob"),
-                 Person::new("Cecil")]);
+    let v = OrderByName::by_sorting(vec![
+        Person::new("Bob"),
+        Person::new("Cecil"),
+        Person::new("Alice"),
+    ]);
+    assert_eq!(
+        v.as_slice(),
+        &[
+            Person::new("Alice"),
+            Person::new("Bob"),
+            Person::new("Cecil")
+        ]
+    );
 }
 
 #[test]
@@ -159,7 +169,7 @@ fn sorted_vec_ref() {
 }
 
 #[test]
-#[cfg(feature="unstable")]
+#[cfg(feature = "unstable")]
 fn sorted_vec_from_sorted_slice() {
     type SortedVec<T, O> = Sorted<Vec<T>, O>;
     let mut arr = [5, 3, 7, 9];
@@ -173,8 +183,9 @@ fn sorted_vec_from_sorted_slice() {
 fn take_sorted_iterator() {
     // Sorted types can generate SortedIterators.
     fn take_sorted<I>(sorted: I)
-        where I: IntoIterator<Item = i32>,
-              I::IntoIter: SortedIterator<Ordering = AscendingOrder>
+    where
+        I: IntoIterator<Item = i32>,
+        I::IntoIter: SortedIterator<Ordering = AscendingOrder>,
     {
         let v: Vec<_> = sorted.into_iter().collect();
         assert_eq!(vec![2, 3, 8, 10], v);
@@ -188,8 +199,9 @@ fn take_sorted_ref_iterator() {
     // By-ref iterators can only be created via Sorted::iter() right now.
     // I.e there is no IntoIterator for &Sorted<>.
     fn take_sorted_ref<'a, I>(sorted: I)
-        where I: IntoIterator<Item = &'a i32>,
-              I::IntoIter: SortedIterator
+    where
+        I: IntoIterator<Item = &'a i32>,
+        I::IntoIter: SortedIterator,
     {
         let v: Vec<_> = sorted.into_iter().cloned().collect();
         assert_eq!([1, 2, 3, 4], v.as_slice());
@@ -219,9 +231,9 @@ fn sorted_vec_from_sorted_iterator() {
 
 #[test]
 fn building_from_empty_vec() {
-    let mut v: Sorted<Vec<i32>,AscendingOrder> = Default::default();
+    let mut v: Sorted<Vec<i32>, AscendingOrder> = Default::default();
     v.insert(3);
     v.insert(1);
     v.insert(2);
-    assert_eq!(&[1,2,3], v.as_slice());
+    assert_eq!(&[1, 2, 3], v.as_slice());
 }

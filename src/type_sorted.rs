@@ -1,10 +1,11 @@
-
 use std::iter::FromIterator;
 
-use std::ops::Deref;
+use super::{
+    Collection, RetainsOrder, SearchableByOrder, SortOrder, Sortable, SortedInsert, SortedIter,
+    SortedIterator,
+};
 use std::marker::PhantomData;
-use super::{Collection, RetainsOrder, SortOrder, Sortable, SortedInsert, SortedIter,
-            SortedIterator, SearchableByOrder};
+use std::ops::Deref;
 
 /// Guarantees that the inner container is sorted in a specific order.
 ///
@@ -19,18 +20,17 @@ pub struct Sorted<T, O> {
     ordering: PhantomData<O>,
 }
 
-
-impl<T, O> Default for Sorted<T, O> 
-    where T: Default + Collection
+impl<T, O> Default for Sorted<T, O>
+where
+    T: Default + Collection,
 {
     fn default() -> Self {
         Sorted {
             collection: Default::default(),
-            ordering: PhantomData
+            ordering: PhantomData,
         }
     }
 }
-
 
 impl<T, O> Sorted<T, O> {
     pub fn as_inner(&self) -> &T {
@@ -38,8 +38,9 @@ impl<T, O> Sorted<T, O> {
     }
 
     pub fn deref_inner<'a, U>(&'a self) -> Sorted<&'a U, O>
-        where U: ?Sized,
-              T: Deref<Target = U>
+    where
+        U: ?Sized,
+        T: Deref<Target = U>,
     {
         Sorted {
             collection: Deref::deref(&self.collection),
@@ -48,7 +49,8 @@ impl<T, O> Sorted<T, O> {
     }
 
     pub fn iter<'a>(&'a self) -> SortedIter<<&T as IntoIterator>::IntoIter, O>
-        where &'a T: IntoIterator
+    where
+        &'a T: IntoIterator,
     {
         SortedIter {
             inner: IntoIterator::into_iter(&self.collection),
@@ -69,8 +71,9 @@ impl<T, O> Sorted<T, O> {
     // would be n x n implementations of the type.
     #[cfg(feature = "unstable")]
     pub fn from<'b, U>(sorted: Sorted<U, O>) -> Self
-        where T: From<U>,
-              U: Sortable
+    where
+        T: From<U>,
+        U: Sortable,
     {
         Sorted {
             collection: From::from(sorted.collection),
@@ -85,10 +88,11 @@ impl<T, O> Sorted<T, O> {
     /// iterator must implement SortedIterator, you'll safely get a sorted collection.
     /// [`Sortable`]: trait.Sortable.html
     pub fn from_iter<I>(iter: I) -> Sorted<T, O>
-        where T: RetainsOrder + FromIterator<<T as Collection>::Item>,
-              I: IntoIterator<Item = T::Item>,
-              I::IntoIter: SortedIterator<Ordering = O>,
-              <I as IntoIterator>::IntoIter: SortedIterator<Ordering = O>
+    where
+        T: RetainsOrder + FromIterator<<T as Collection>::Item>,
+        I: IntoIterator<Item = T::Item>,
+        I::IntoIter: SortedIterator<Ordering = O>,
+        <I as IntoIterator>::IntoIter: SortedIterator<Ordering = O>,
     {
         Sorted {
             collection: iter.into_iter().collect(),
@@ -98,8 +102,9 @@ impl<T, O> Sorted<T, O> {
 }
 
 impl<T, O> Sorted<T, O>
-    where T: Sortable,
-          O: SortOrder<T::Item>
+where
+    T: Sortable,
+    O: SortOrder<T::Item>,
 {
     pub fn by_sorting(mut collection: T) -> Self {
         collection.sort(O::cmp);
@@ -111,8 +116,9 @@ impl<T, O> Sorted<T, O>
 }
 
 impl<T, O> Sorted<T, O>
-    where T: SearchableByOrder<O>,
-          O: SortOrder<T::Item>
+where
+    T: SearchableByOrder<O>,
+    O: SortOrder<T::Item>,
 {
     pub fn search(&self, a: &T::Item) -> Result<usize, usize> {
         self.collection.search(a)
@@ -120,8 +126,9 @@ impl<T, O> Sorted<T, O>
 }
 
 impl<T, O> Sorted<T, O>
-    where T: Sortable + SortedInsert<O>,
-          O: SortOrder<T::Item>
+where
+    T: Sortable + SortedInsert<O>,
+    O: SortOrder<T::Item>,
 {
     pub fn insert(&mut self, x: T::Item) {
         self.collection.insert(x)
@@ -131,8 +138,9 @@ impl<T, O> Sorted<T, O>
 impl<T, O> Sorted<T, O> {
     /// Similar to Option::as_ref. It's mapping the inner type with AsRef.
     pub fn as_ref<U>(&self) -> Sorted<&U, O>
-        where T: AsRef<U>,
-              U: ?Sized + RetainsOrder
+    where
+        T: AsRef<U>,
+        U: ?Sized + RetainsOrder,
     {
         Sorted {
             collection: AsRef::as_ref(&self.collection),
@@ -149,7 +157,8 @@ impl<T, O> Deref for Sorted<T, O> {
 }
 
 impl<T, O> IntoIterator for Sorted<T, O>
-    where T: IntoIterator<Item = <T as Collection>::Item> + Sortable
+where
+    T: IntoIterator<Item = <T as Collection>::Item> + Sortable,
 {
     type Item = <T as Collection>::Item;
     type IntoIter = SortedIter<T::IntoIter, O>;

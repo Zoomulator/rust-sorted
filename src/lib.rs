@@ -26,7 +26,7 @@ pub use trait_collection::Collection;
 pub use trait_retains_order::RetainsOrder;
 pub use trait_searchable_by_order::SearchableByOrder;
 pub use trait_sort_order::keys;
-pub use trait_sort_order::{SortOrder, AscendingOrder, DescendingOrder, Key, KeyOrder};
+pub use trait_sort_order::{AscendingOrder, DescendingOrder, Key, KeyOrder, SortOrder};
 pub use trait_sortable::Sortable;
 pub use trait_sorted_insert::SortedInsert;
 pub use trait_sorted_iterator::SortedIterator;

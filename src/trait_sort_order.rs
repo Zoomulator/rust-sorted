@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::marker::PhantomData;
 
-use super::{Sorted, Sortable};
+use super::{Sortable, Sorted};
 
 pub trait SortOrder<T>: Clone + Copy {
     fn cmp(&T, &T) -> Ordering;
@@ -15,7 +15,8 @@ pub trait SortOrder<T>: Clone + Copy {
 pub struct AscendingOrder;
 
 impl<T> SortOrder<T> for AscendingOrder
-    where T: Ord + Clone
+where
+    T: Ord + Clone,
 {
     fn cmp(a: &T, b: &T) -> Ordering {
         a.cmp(b)
@@ -26,13 +27,13 @@ impl<T> SortOrder<T> for AscendingOrder
 pub struct DescendingOrder;
 
 impl<T> SortOrder<T> for DescendingOrder
-    where T: Ord + Clone
+where
+    T: Ord + Clone,
 {
     fn cmp(a: &T, b: &T) -> Ordering {
         b.cmp(a)
     }
 }
-
 
 #[derive(Debug, Clone, Copy)]
 pub struct KeyOrder<K, O> {
@@ -40,8 +41,9 @@ pub struct KeyOrder<K, O> {
 }
 
 impl<T, K, O> SortOrder<T> for KeyOrder<K, O>
-    where K: Key<T> + Copy,
-          O: SortOrder<K::Key>
+where
+    K: Key<T> + Copy,
+    O: SortOrder<K::Key>,
 {
     fn cmp(a: &T, b: &T) -> Ordering {
         O::cmp(&K::key(a), &K::key(b))
