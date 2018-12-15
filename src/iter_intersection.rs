@@ -2,7 +2,7 @@ use super::{SortOrder, SortedIterator};
 use std::cmp::Ordering;
 
 /// Adaptor iterator which outputs the intersection of two sorted iterators in
-/// linear time. Will ouput the unique items (deduped).
+/// linear time. Will ouput the repeated items as many times as they are present in both iterators.
 #[derive(Debug)]
 pub struct Intersection<I, J>
 where
@@ -40,8 +40,8 @@ where
             match (a, b) {
                 (Some(a), Some(b)) => match I::Ordering::cmp(&a, &b) {
                     Ordering::Equal => return Some(a),
-                    Ordering::Less => (),
-                    Ordering::Greater => (),
+                    Ordering::Less => self.b = Some(b),
+                    Ordering::Greater => self.a = Some(a),
                 },
                 _ => return None,
             }
